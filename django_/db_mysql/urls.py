@@ -19,4 +19,5 @@ from . import views
 
 urlpatterns = [
     path('native_select/', views.native_select),
+    path('orm_select/', views.orm_select),
 ]
