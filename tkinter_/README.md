@@ -7,3 +7,7 @@ pip install pyinstaller
 ```shell
 pyinstaller --onefile --noconsole --icon=icon.ico main.py
 ```
+
+
+# 参考资料
+[菜鸟教程](https://www.runoob.com/python/python-gui-tkinter.html)
