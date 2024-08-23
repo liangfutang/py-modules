@@ -10,24 +10,32 @@ def center_window(root, width, height):
     # 设置窗口的位置
     root.geometry(f"{width}x{height}+{int(x)}+{int(y)}")
 
-def say_hello():
-    label.config(text="Hello, " + name_entry.get() + "!")
 
-# 创建主窗口
-root = tk.Tk()
-root.title("计算器")
+class Application(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.pack()
+        self.create_homepage()
 
-# 创建标签和文本框
-label = tk.Label(root, text="请输入你的名字：")
-label.pack()
+    def create_homepage(self):
+        # 创建标签和文本框
+        self.label = tk.Label(root, text="请输入你的名字：")
+        self.label.pack()
 
-name_entry = tk.Entry(root)
-name_entry.pack()
+        self.name_entry = tk.Entry(root)
+        self.name_entry.pack()
 
-# 创建按钮
-hello_button = tk.Button(root, text="点击我", command=say_hello)
-hello_button.pack()
+        # 创建按钮
+        hello_button = tk.Button(root, text="点击我", command=self.say_hello)
+        hello_button.pack()
 
-# 启动Tkinter主事件循环
-center_window(root, 400, 300)
-root.mainloop()
+    def say_hello(self):
+        self.label.config(text="Hello, " + self.name_entry.get() + "!")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("TDengineGUI")
+    center_window(root, 1200, 900)
+    app = Application(master=root)
+    app.mainloop()
