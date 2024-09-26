@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 
 # 计算总分并返回学号和姓名、学号和总分的字典
+# id2deduct_score：key:学号，value:扣分
 def cal_total_score(data):
     id2deduct_score = {}
     for index, row in data.iterrows():
@@ -13,6 +14,7 @@ def cal_total_score(data):
     return id2deduct_score
 
 # 按照总分排序，并返回学号和排名的字典
+# id2sort：分数排名：key:学号，value:排名位置
 def sort_total_score(id2deduct_score):
     id2sort = {}
     # 按照分数降序排列
