@@ -13,10 +13,10 @@ def cal_total_score(data):
     return id2deduct_score
 
 # 按照总分排序，并返回学号和排名的字典
-def sort_total_score(id2score):
+def sort_total_score(id2deduct_score):
     id2sort = {}
     # 按照分数降序排列
-    sorted_students = sorted(id2score.items(), key=lambda item: item[1], reverse=True)
+    sorted_students = sorted(id2deduct_score.items(), key=lambda item: item[1], reverse=False)
     last_score = None
     last_sort = 0
     for i, (student, score) in enumerate(sorted_students):
