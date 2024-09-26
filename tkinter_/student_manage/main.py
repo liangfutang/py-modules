@@ -49,6 +49,7 @@ class Application(tk.Frame):
                 id2deduct_score, id2name = cal_total_score(data)
                 id2sort = sort_total_score(id2deduct_score)
                 write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_names[0])
+                messagebox.showinfo("success", "成绩统计完成")
             else:
                 print("False")
 
