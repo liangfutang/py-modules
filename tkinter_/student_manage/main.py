@@ -4,6 +4,7 @@ import pandas as pd
 from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
 import os
+import sys
 
 def center_window(root, width, height):
     # 获取屏幕尺寸
@@ -36,13 +37,20 @@ class Application(tk.Frame):
     def say_hello(self):
         self.label.config(text="Hello, " + self.name_entry.get() + "!")
 
+    def resource_path(self, relative_path):
+        """获取打包后文件的路径"""
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
 
+        return os.path.join(base_path, relative_path)
     def download_file(self):
         # 选择目标文件夹
         folder_path = filedialog.askdirectory(title="选择保存文件的文件夹")
         if folder_path:  # 如果用户选择了文件夹
             # 指定要下载的文件路径（项目中的文件）
-            source_file = "数学成绩统计模板.xlsx"  # 这里替换为你的文件路径
+            source_file = self.resource_path("数学成绩统计模板.xlsx")
 
             # 构建目标文件的完整路径
             destination_file = os.path.join(folder_path, os.path.basename(source_file))
