@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import font, filedialog, messagebox
 import pandas as pd
 from excel_cal import cal_total_score, sort_total_score, write_total_score
+import shutil
+import os
 
 def center_window(root, width, height):
     # 获取屏幕尺寸
@@ -24,13 +26,33 @@ class Application(tk.Frame):
     def create_homepage(self):
         container = tk.Frame(self)
         container.pack(pady=10)
+        # 模板下载
+        download_but = tk.Button(container, text="下载模板", command=self.download_file)
+        download_but.grid(row=1, column=0, columnspan=2, pady=10)
         # 选择需要计算的表格文件
         choose_but = tk.Button(container, text="选择文件", command=self.import_file)
-        choose_but.grid(row=1, column=0, columnspan=2, pady=10)
+        choose_but.grid(row=2, column=0, columnspan=2, pady=10)
 
     def say_hello(self):
         self.label.config(text="Hello, " + self.name_entry.get() + "!")
 
+
+    def download_file(self):
+        # 选择目标文件夹
+        folder_path = filedialog.askdirectory(title="选择保存文件的文件夹")
+        if folder_path:  # 如果用户选择了文件夹
+            # 指定要下载的文件路径（项目中的文件）
+            source_file = "数学成绩统计模板.xlsx"  # 这里替换为你的文件路径
+
+            # 构建目标文件的完整路径
+            destination_file = os.path.join(folder_path, os.path.basename(source_file))
+
+            try:
+                # 将文件复制到目标文件夹
+                shutil.copy(source_file, destination_file)
+                messagebox.showinfo("下载", f"文件已保存到: {destination_file}")
+            except Exception as e:
+                messagebox.showerror("错误", f"文件下载失败: {e}")
     def import_file(self):
         filetypes = (
             ('text files', '*.xlsx'),
