@@ -46,9 +46,9 @@ class Application(tk.Frame):
                 xls = pd.ExcelFile(filename)
                 sheet_names = xls.sheet_names
                 data = pd.read_excel(filename, sheet_name=sheet_names[0])
-                id2score = cal_total_score(data)
-                id2sort = sort_total_score(id2score)
-                write_total_score(id2score, id2sort, data, filename, sheet_names[0])
+                id2deduct_score = cal_total_score(data)
+                id2sort = sort_total_score(id2deduct_score)
+                write_total_score(id2deduct_score, id2sort, data, filename, sheet_names[0])
             else:
                 print("False")
 
