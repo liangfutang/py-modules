@@ -4,12 +4,14 @@ from openpyxl import load_workbook
 # id2deduct_score：key:学号，value:扣分
 def cal_total_score(data):
     id2deduct_score = {}
+    start, end = cal_deduct_score_range(data)
+    print(start, end)
     for index, row in data.iterrows():
         # 过滤掉不是学号的列
         if not isinstance(row.values[0], int):
             continue
         # 统计每一个学号对应的分数
-        deduct_points = row[2:14].sum()
+        deduct_points = row[start:end].sum()
         id2deduct_score[row.values[0]] = deduct_points
     return id2deduct_score
 
@@ -46,3 +48,15 @@ def write_total_score(id2deduct_score, id2sort, data, filename, sheet_name):
     # 保存工作簿
     wb.save(filename)
 
+# 检查文件找出统计扣分的列范围
+def cal_deduct_score_range(data):
+    start = 0
+    end = 0
+    title_row = data.iloc[0]
+    for col_index, value in enumerate(title_row):
+        if value == '姓名':
+            start = col_index + 1
+        if value == '扣分':
+            end = col_index - 1
+            break
+    return start, end
