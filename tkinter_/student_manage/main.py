@@ -48,8 +48,13 @@ class Application(tk.Frame):
                 data = pd.read_excel(filename, sheet_name=sheet_names[0])
                 id2deduct_score, id2name = cal_total_score(data)
                 id2sort = sort_total_score(id2deduct_score)
-                write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_names[0])
-                messagebox.showinfo("success", "成绩统计完成")
+                try:
+                    write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_names[0])
+                    messagebox.showinfo("success", "成绩统计完成")
+                except PermissionError as e:
+                    messagebox.showwarning("PermissionError", "文件正在被占用，请关闭文件后再试")
+                except Exception as e:
+                    messagebox.showerror("Error", "未知错误")
             else:
                 print("False")
 
