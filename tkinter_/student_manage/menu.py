@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 def create_menu(root):
     # 创建一个菜单栏
@@ -21,4 +22,4 @@ def on_hello():
     pass
 
 def about():
-    pass
+    messagebox.showinfo("About Software", "This is a system to manage students info.")
