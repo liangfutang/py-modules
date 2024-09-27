@@ -108,3 +108,7 @@ venv.bak/
 *.iws
 *.iml
 *.ipr
+
+requirements.txt
+Pipfile
+Pipfile.lock
