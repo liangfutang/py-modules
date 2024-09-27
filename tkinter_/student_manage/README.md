@@ -17,6 +17,7 @@ python -m venv venv
 # 安装项目必须的依赖
 ```shell
 pip install -r requirements.txt
+pip install pyinstaller
 ```
 
 # 建立虚拟环境

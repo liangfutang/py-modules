@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import font, filedialog, messagebox
-import pandas as pd
+from pandas import ExcelFile, read_excel
 from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
 import os
@@ -76,9 +76,9 @@ class Application(tk.Frame):
         if filename:
             askback = messagebox.askyesno('确认统计', '统计文件: ' + filename)
             if askback:
-                xls = pd.ExcelFile(filename)
+                xls = ExcelFile(filename)
                 sheet_names = xls.sheet_names
-                data = pd.read_excel(filename, sheet_name=sheet_names[0])
+                data = read_excel(filename, sheet_name=sheet_names[0])
                 id2deduct_score, id2name = cal_total_score(data)
                 id2sort = sort_total_score(id2deduct_score)
                 try:
