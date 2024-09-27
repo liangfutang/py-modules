@@ -5,6 +5,7 @@ from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
 import os
 import sys
+import menu
 
 def center_window(root, width, height):
     # 获取屏幕尺寸
@@ -15,6 +16,8 @@ def center_window(root, width, height):
     y = (screen_height - height) / 2
     # 设置窗口的位置
     root.geometry(f"{width}x{height}+{int(x)}+{int(y)}")
+    # 创建一个菜单栏
+    menu.create_menu(root)
 
 
 class Application(tk.Frame):
@@ -67,11 +70,11 @@ class Application(tk.Frame):
             ('All files', '*.*')
         )
         filename = filedialog.askopenfilename(
-            title='选择一个需要清洗的表格文件',
+            title='选择一个需要统计的表格文件',
             initialdir='/',
             filetypes=filetypes)
         if filename:
-            askback = messagebox.askyesno('确认清洗', '清洗文件: ' + filename)
+            askback = messagebox.askyesno('确认统计', '统计文件: ' + filename)
             if askback:
                 xls = pd.ExcelFile(filename)
                 sheet_names = xls.sheet_names
@@ -90,7 +93,7 @@ class Application(tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.title("数据清洗GUI系统 1.0")
+    root.title("Student Manager System 1.0")
     center_window(root, 800, 550)
     app = Application(master=root)
     app.mainloop()
