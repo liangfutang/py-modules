@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import font, filedialog, messagebox
+from tkinter import Toplevel, filedialog, messagebox, Label, StringVar, Checkbutton, Button
 from pandas import ExcelFile, read_excel
 from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
@@ -49,19 +49,30 @@ class Application(tk.Frame):
 
         return os.path.join(base_path, relative_path)
     def download_file(self):
+        options = ["501 - 数学成绩统计模板.xlsx", "502 - 数学成绩统计模板.xlsx"]
+        # 回调函数处理用户的选择
+        def handle_selection(selected):
+            if selected:
+                messagebox.showinfo("选择结果", f"您选择了: {', '.join(selected)}")
+            else:
+                messagebox.showinfo("选择结果", "您没有选择任何选项")
+        dialog = MultiSelectDialog(self.master, "模板下载列表", options, handle_selection)
+        self.master.wait_window(dialog)
+        if not dialog.selected_options:
+            return
         # 选择目标文件夹
         folder_path = filedialog.askdirectory(title="选择保存文件的文件夹")
         if folder_path:  # 如果用户选择了文件夹
             # 指定要下载的文件路径（项目中的文件）
-            source_file = self.resource_path("数学成绩统计模板.xlsx")
-
-            # 构建目标文件的完整路径
-            destination_file = os.path.join(folder_path, os.path.basename(source_file))
+            source_dir = self.resource_path("templates")
 
             try:
                 # 将文件复制到目标文件夹
-                shutil.copy(source_file, destination_file)
-                messagebox.showinfo("下载", f"文件已保存到: {destination_file}")
+                for item in dialog.selected_options:
+                    source_file = os.path.join(source_dir, item)
+                    destination_file = os.path.join(folder_path, item)
+                    shutil.copy(source_file, destination_file)
+                messagebox.showinfo("下载", f"文件已保存到: {folder_path}")
             except Exception as e:
                 messagebox.showerror("错误", f"文件下载失败: {e}")
     def import_file(self):
@@ -90,6 +101,53 @@ class Application(tk.Frame):
                     messagebox.showerror("Error", "未知错误")
             else:
                 print("False")
+
+def center_dialog(master, width, height):
+    # 获取屏幕尺寸
+    screen_width = master.winfo_screenwidth()
+    screen_height = master.winfo_screenheight()
+    # 计算窗口的开始位置
+    x = (screen_width - width) / 2
+    y = (screen_height - height) / 2
+    return f"{width}x{height}+{int(x)}+{int(y)}"
+
+class MultiSelectDialog(Toplevel):
+    def __init__(self, parent, title, options, callback):
+        super().__init__(parent)
+        self.title(title)
+        dialog_show = center_dialog(parent, 300, 200)
+        self.geometry(dialog_show)
+        self.callback = callback
+        self.check_vars = []
+        self.selected_options = []
+        # 创建并放置标签
+        label = Label(self, text="请选择一个或多个模板：", anchor='w')
+        label.pack(fill=tk.X, padx=10, pady=10)
+        # 创建并放置复选按钮
+        for option in options:
+            var = StringVar()
+            cb = Checkbutton(self, text=option, variable=var, onvalue=option, offvalue="")
+            cb.deselect()  # 默认不选中
+            cb.pack(anchor=tk.W)
+            self.check_vars.append(var)
+        # 创建并放置确认和取消按钮
+        btn_frame = tk.Frame(self)
+        btn_frame.pack(pady=10)
+
+        ok_button = Button(btn_frame, text="确认", command=self.on_ok)
+        ok_button.pack(side=tk.LEFT, padx=5)
+
+        cancel_button = Button(btn_frame, text="取消", command=self.destroy)
+        cancel_button.pack(side=tk.RIGHT, padx=5)
+
+    def on_ok(self):
+        # 收集所有被选中的选项
+        self.selected_options = [var.get() for var in self.check_vars if var.get()]
+        if self.selected_options:
+            messagebox.showinfo("选择结果", f"您选择了: {', '.join(self.selected_options)}")
+        else:
+            messagebox.showinfo("选择结果", "您没有选择任何选项")
+        self.destroy()  # 关闭对话框
 
 if __name__ == "__main__":
     root = tk.Tk()
