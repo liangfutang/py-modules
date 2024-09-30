@@ -31,7 +31,7 @@ pipenv shell
 
 # 生成可执行文件
 ```shell
-pyinstaller --onefile --noconsole --add-data="数学成绩统计模板.xlsx;."  main.py
+pyinstaller --onefile --noconsole --add-data="templates;templates"  main.py
 ```
 
 # 删除虚拟环境
