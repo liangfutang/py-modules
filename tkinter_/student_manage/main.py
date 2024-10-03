@@ -49,7 +49,7 @@ class Application(tk.Frame):
 
         return os.path.join(base_path, relative_path)
     def download_file(self):
-        options = ["501 - 数学成绩统计模板.xlsx", "502 - 数学成绩统计模板.xlsx"]
+        options = ["数学成绩统计模板501.xlsx", "数学成绩统计模板502.xlsx"]
         # 回调函数处理用户的选择
         def handle_selection(selected):
             if selected:
