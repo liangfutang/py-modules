@@ -1,20 +1,24 @@
 from openpyxl import load_workbook
 
+import pandas as pd
+
 # 计算总分并返回学号和姓名、学号和总分的字典
 # id2deduct_score：key:学号，value:扣分
 def cal_total_score(data):
     id2deduct_score = {}
     id2name = {}
-    start, end = cal_deduct_score_range(data)
+    col_start, col_end = cal_deduct_score_range(data)
+    row_start = 1; row_end = 0
     for index, row in data.iterrows():
         # 过滤掉不是学号的列
         if not isinstance(row.values[0], int):
             continue
         # 统计每一个学号对应的分数
-        deduct_points = row[start:end].sum()
+        deduct_points = row[col_start:col_end].sum()
         id2deduct_score[row.values[0]] = deduct_points
         id2name[row.values[0]] = row.values[1]
-    return id2deduct_score, id2name
+        row_end = index
+    return id2deduct_score, id2name, row_start, row_end, col_start, col_end
 
 # 按照总分排序，并返回学号和排名的字典
 # id2sort：分数排名：key:学号，value:排名位置
@@ -32,7 +36,7 @@ def sort_total_score(id2deduct_score):
     return id2sort
 
 # 将总分和排名写回到表格中
-def write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_name):
+def write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_name, row_start, row_end, col_start, col_end):
     # 加载工作簿
     wb = load_workbook(filename)
     ws = wb[sheet_name]
@@ -56,6 +60,26 @@ def write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_n
         ws.cell(row=index + 2, column=id_index + 1, value=id2name[s_id])
         ws.cell(row=index + 2, column=id_index + 2, value=100-id2deduct_score[s_id])
         ws.cell(row=index + 2, column=id_index + 3, value=sort)
+
+    # 计算得分率
+    for col_index, c in enumerate(data.columns):
+        if col_index < col_start or col_index > col_end:
+            continue
+        try:
+            # 获取每一题的分数
+            single_score = data.iloc[row_end + 1, col_index]
+            if pd.isna(single_score):
+                continue
+            dect_total = data.iloc[row_start:row_end, col_index].sum()
+            percentage = '%.2f'%((single_score * len(id2name) - dect_total) / (single_score * len(id2name)))
+            ws.cell(row=row_end + 1 + 2, column=col_index + 1, value=percentage)
+        except Exception as e:
+            pass
+
+    # 计算班级均分
+    total_score = '%.2f'%(data.iloc[row_start:row_end, col_end + 2].mean())
+    ws.cell(row=row_end + 1 + 2, column=col_end + 1 + 3, value=total_score)
+    print(total_score)
     # 保存工作簿
     wb.save(filename)
 
