@@ -6,6 +6,7 @@ import shutil
 import os
 import sys
 import menu
+from sort_show import SortShow
 
 def center_window(root, width, height):
     # 获取屏幕尺寸
@@ -34,11 +35,11 @@ class Application(tk.Frame):
         download_but = tk.Button(container, text="下载模板", command=self.download_file)
         download_but.grid(row=1, column=0, columnspan=2, pady=10)
         # 选择需要计算的表格文件
-        choose_but = tk.Button(container, text="选择文件", command=self.import_file)
+        choose_but = tk.Button(container, text="成绩计算", command=self.import_file)
         choose_but.grid(row=2, column=0, columnspan=2, pady=10)
-
-    def say_hello(self):
-        self.label.config(text="Hello, " + self.name_entry.get() + "!")
+        # 成绩曲线展示
+        choose_but = tk.Button(container, text="排名曲线", command=self.sort_show)
+        choose_but.grid(row=3, column=0, columnspan=2, pady=10)
 
     def resource_path(self, relative_path):
         """获取打包后文件的路径"""
@@ -81,7 +82,7 @@ class Application(tk.Frame):
             ('All files', '*.*')
         )
         filename = filedialog.askopenfilename(
-            title='选择一个需要统计的表格文件',
+            title='选择一个需要计算成绩的表格文件',
             initialdir='/',
             filetypes=filetypes)
         if filename:
@@ -102,6 +103,27 @@ class Application(tk.Frame):
             else:
                 print("False")
 
+    def sort_show(self):
+        filetypes = (
+            ('text files', '*.xlsx'),
+            ('All files', '*.*')
+        )
+        filename = filedialog.askopenfilename(
+            title='选择一个需要展示排名曲线的表格文件',
+            initialdir='/',
+            filetypes=filetypes)
+        if filename:
+            askback = messagebox.askyesno('确认展示', '展示文件: ' + filename)
+            if askback:
+                xls = ExcelFile(filename)
+                sheet_names = xls.sheet_names
+                data = read_excel(filename, sheet_name=sheet_names[0])
+                try:
+                    SortShow(self, data)
+                except PermissionError as e:
+                    messagebox.showwarning("PermissionError", "文件正在被占用，请关闭文件后再试")
+                except Exception as e:
+                    messagebox.showerror("Error", "未知错误")
 def center_dialog(master, width, height):
     # 获取屏幕尺寸
     screen_width = master.winfo_screenwidth()
