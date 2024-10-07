@@ -9,7 +9,7 @@ def SortShow(data):
     center_window(sort_toplevel, 800, 550)
 
     # 读取数据模型
-    id2name, id2sortList = data_model(data)
+    id2name, id2sortList, xaxis = data_model(data)
     # 初始化界面
     header_frame, plot_frame = init_sort_win(sort_toplevel, id2name, id2sortList)
 
@@ -95,7 +95,15 @@ def show_multiselect_dialog(root, id2name):
 def data_model(data):
     id2name = {}
     id2sortList = {}
+    xaxis = []
     for index, row in data.iterrows():
+        # 选出列名
+        if '学号'==row.values[0]:
+            for col_index, column in enumerate(data.columns):
+                if col_index < 2:
+                    continue
+                xaxis.append(row[column])
+            continue
         # 过滤掉不是学号的列
         if not isinstance(row.values[0], int):
             continue
@@ -113,7 +121,7 @@ def data_model(data):
             else:
                 sort_list.append(value)
         id2sortList[row.values[0]] = sort_list
-    return id2name, id2sortList
+    return id2name, id2sortList, xaxis
 
 # 检索展示成绩排名
 def echarts_show(id2name, id2sortList, selected_students, plot_frame):
