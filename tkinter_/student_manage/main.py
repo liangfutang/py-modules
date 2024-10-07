@@ -119,7 +119,7 @@ class Application(tk.Frame):
                 sheet_names = xls.sheet_names
                 data = read_excel(filename, sheet_name=sheet_names[0])
                 try:
-                    SortShow(self, data)
+                    SortShow(data)
                 except PermissionError as e:
                     messagebox.showwarning("PermissionError", "文件正在被占用，请关闭文件后再试")
                 except Exception as e:
