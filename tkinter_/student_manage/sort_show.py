@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import menu
+from pyecharts.charts import Line
+from pyecharts.faker import Faker
 
 def SortShow(data):
     # 清除现有内容
@@ -11,12 +13,12 @@ def SortShow(data):
     # 读取数据模型
     id2name, id2sortList, xaxis = data_model(data)
     # 初始化界面
-    header_frame, plot_frame = init_sort_win(sort_toplevel, id2name, id2sortList)
+    header_frame, plot_frame = init_sort_win(sort_toplevel, id2name, id2sortList, xaxis)
 
     # 检索展示折线图
     sort_toplevel.mainloop()
 
-def init_sort_win(sort_toplevel, id2name, id2sortList):
+def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
     # 创建框架
     header_frame = ttk.Frame(sort_toplevel, padding="10")
     header_frame.pack(fill=tk.X)
@@ -27,7 +29,7 @@ def init_sort_win(sort_toplevel, id2name, id2sortList):
     def on_plot_button_click():
         selected_students = show_multiselect_dialog(sort_toplevel, id2name)
         if len(selected_students) != 0:
-            echarts_show(id2name, id2sortList, selected_students, plot_frame)
+            echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame)
         else:
             messagebox.showwarning("提示", "至少选择一个学生")
             print(selected_students)
@@ -124,7 +126,7 @@ def data_model(data):
     return id2name, id2sortList, xaxis
 
 # 检索展示成绩排名
-def echarts_show(id2name, id2sortList, selected_students, plot_frame):
+def echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame):
     pass
 
 def center_window(root, width, height):
