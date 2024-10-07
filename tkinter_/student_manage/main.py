@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Toplevel, filedialog, messagebox, Label, StringVar, Checkbutton, Button
+from tkinter import ttk, Toplevel, filedialog, messagebox, Label, StringVar, Checkbutton, Button
 from pandas import ExcelFile, read_excel
 from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
@@ -50,7 +50,9 @@ class Application(tk.Frame):
 
         return os.path.join(base_path, relative_path)
     def download_file(self):
-        options = ["数学成绩统计模板501.xlsx", "数学成绩统计模板502.xlsx"]
+        options_cal = ["数学成绩统计模板501.xlsx", "数学成绩统计模板502.xlsx"]
+        options_sort = ["数学成绩排名模板501.xlsx", "数学成绩排名模板502.xlsx"]
+        options = [options_cal, options_sort]
         # 回调函数处理用户的选择
         def handle_selection(selected):
             if selected:
@@ -137,7 +139,7 @@ class MultiSelectDialog(Toplevel):
     def __init__(self, parent, title, options, callback):
         super().__init__(parent)
         self.title(title)
-        dialog_show = center_dialog(parent, 300, 200)
+        dialog_show = center_dialog(parent, 300, 235)
         self.geometry(dialog_show)
         self.callback = callback
         self.check_vars = []
@@ -146,12 +148,17 @@ class MultiSelectDialog(Toplevel):
         label = Label(self, text="请选择一个或多个模板：", anchor='w')
         label.pack(fill=tk.X, padx=10, pady=10)
         # 创建并放置复选按钮
-        for option in options:
-            var = StringVar()
-            cb = Checkbutton(self, text=option, variable=var, onvalue=option, offvalue="")
-            cb.deselect()  # 默认不选中
-            cb.pack(anchor=tk.W)
-            self.check_vars.append(var)
+        separator_flag = 1
+        for option_one_type in options:
+            for option in option_one_type:
+                var = StringVar()
+                cb = Checkbutton(self, text=option, variable=var, onvalue=option, offvalue="")
+                cb.deselect()  # 默认不选中
+                cb.pack(anchor=tk.W)
+                self.check_vars.append(var)
+            if separator_flag == 1:
+                ttk.Separator(self).pack(fill=tk.X, padx=10, pady=5)
+                separator_flag += 1
         # 创建并放置确认和取消按钮
         btn_frame = tk.Frame(self)
         btn_frame.pack(pady=10)
