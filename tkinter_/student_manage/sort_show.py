@@ -11,12 +11,12 @@ def SortShow(data):
     # 读取数据模型
     id2name, id2sortList = data_model(data)
     # 初始化界面
-    header_frame, plot_frame = init_sort_win(sort_toplevel, id2name)
+    header_frame, plot_frame = init_sort_win(sort_toplevel, id2name, id2sortList)
 
     # 检索展示折线图
     sort_toplevel.mainloop()
 
-def init_sort_win(sort_toplevel, id2name):
+def init_sort_win(sort_toplevel, id2name, id2sortList):
     # 创建框架
     header_frame = ttk.Frame(sort_toplevel, padding="10")
     header_frame.pack(fill=tk.X)
@@ -27,7 +27,7 @@ def init_sort_win(sort_toplevel, id2name):
     def on_plot_button_click():
         selected_students = show_multiselect_dialog(sort_toplevel, id2name)
         if len(selected_students) != 0:
-            print(selected_students)
+            echarts_show(id2name, id2sortList, selected_students, plot_frame)
         else:
             messagebox.showwarning("提示", "至少选择一个学生")
             print(selected_students)
@@ -116,7 +116,7 @@ def data_model(data):
     return id2name, id2sortList
 
 # 检索展示成绩排名
-def search_show(data):
+def echarts_show(id2name, id2sortList, selected_students, plot_frame):
     pass
 
 def center_window(root, width, height):
