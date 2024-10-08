@@ -1,8 +1,14 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import menu
-from pyecharts.charts import Line
-from pyecharts.faker import Faker
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+import numpy as np
+import matplotlib as mpl
+
+# 设置matplotlib的字体为支持中文的字体
+mpl.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
+mpl.rcParams['axes.unicode_minus'] = False  # 解决负号'-'显示为方块的问题
 
 def SortShow(data):
     # 清除现有内容
@@ -127,7 +133,39 @@ def data_model(data):
 
 # 检索展示成绩排名
 def echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame):
-    pass
+    # 清除plot_frame中的现有内容
+    for widget in plot_frame.winfo_children():
+        widget.destroy()
+
+    # 创建一个Figure对象
+    fig = Figure(figsize=(8, 4), dpi=100)
+
+    # 添加一个子图
+    ax = fig.add_subplot(111)
+
+    # 设置x轴标签
+    ax.set_xlabel('单元')
+    ax.set_ylabel('排名')
+    ax.set_title('学生排名图')
+    ax.set_xticks(np.arange(len(xaxis)))
+    ax.set_xticklabels(xaxis, rotation=45, ha='right')
+
+    # 为每个选定的学生绘制折线图
+    for student_id in selected_students:
+        name = id2name[student_id]
+        sort_list = id2sortList[student_id]
+        y_values = [y if y is not None else np.nan for y in sort_list]  # 处理None值
+        ax.plot(y_values, label=name, marker='o')
+
+    # 添加图例
+    ax.legend()
+
+    # 创建一个FigureCanvasTkAgg对象
+    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+    canvas.draw()
+
+    # 将canvas放置到frame中
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 def center_window(root, width, height):
     # 获取屏幕尺寸
