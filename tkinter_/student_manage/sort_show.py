@@ -14,10 +14,13 @@ from datetime import datetime
 mpl.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
 mpl.rcParams['axes.unicode_minus'] = False  # 解决负号'-'显示为方块的问题
 
+title = '学生单元考试排名曲线'
+xlabel = '单元'
+ylabel = '排名'
 def SortShow(data):
     # 清除现有内容
     sort_toplevel = tk.Toplevel()
-    sort_toplevel.title("学生排名图")
+    sort_toplevel.title("单元考试排名曲线图")
     center_window(sort_toplevel, 800, 550)
 
     # 读取数据模型
@@ -79,9 +82,9 @@ def export_pic_morey(xaxis, selected_students, id2name, id2sortList, dir_path):
     # 创建一个新的图形窗口
     plt.figure()
     # 添加标题和轴标签
-    plt.title('学生排名图')
-    plt.xlabel('单元')
-    plt.ylabel('排名')
+    plt.title(title)
+    # plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     # 设置 y 轴的刻度为整数
     plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
     # 添加栅格线
@@ -107,9 +110,9 @@ def export_pic_oney(xaxis, one_id, name, sortList, dir_path):
     # 绘制数据
     plt.plot(xaxis, sortList, marker='o', label=name)
     # 添加标题和轴标签
-    plt.title('学生排名图')
-    plt.xlabel('单元')
-    plt.ylabel('排名')
+    plt.title(title)
+    # plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     # 设置 y 轴的刻度为整数
     plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
     # 添加栅格线
@@ -219,9 +222,9 @@ def echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame):
     ax = fig.add_subplot(111)
 
     # 设置x轴标签
-    ax.set_xlabel('单元')
-    ax.set_ylabel('排名')
-    ax.set_title('学生排名图')
+    # ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
     ax.set_xticks(np.arange(len(xaxis)))
     ax.set_xticklabels(xaxis, rotation=45, ha='right')
     # 设置y轴刻度为整数
