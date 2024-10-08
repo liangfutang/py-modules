@@ -56,17 +56,21 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
         if len(selected_students) == 0:
             messagebox.showwarning("提示", "请先选择学生", parent=sort_toplevel)
         else:
-            part_dir_path = filedialog.askdirectory(title="选择保存选中学生排名图片存储文件夹")
-            if part_dir_path:
-                part_dir_path = os.path.join(part_dir_path, "part", datetime.now().strftime("%Y%m%d%H%M%S"))
-                if not os.path.exists(part_dir_path):
-                    os.makedirs(part_dir_path, exist_ok=True)
-                # 保存单个学生排名的图片
-                for one_id in selected_students:
-                    export_pic_oney(xaxis, one_id, id2name[one_id], id2sortList[one_id], part_dir_path)
-                # 保存综合排名的图片
+            save_selected("选择保存选中学生排名图片存储文件夹", "part", "已导出选中学生排名图片到: ")
+
+    def save_selected(askdir_msg, save_type, success_show_msg):
+        part_dir_path = filedialog.askdirectory(title=askdir_msg)
+        if part_dir_path:
+            part_dir_path = os.path.join(part_dir_path, save_type, datetime.now().strftime("%Y%m%d%H%M%S"))
+            if not os.path.exists(part_dir_path):
+                os.makedirs(part_dir_path, exist_ok=True)
+            # 保存单个学生排名的图片
+            for one_id in selected_students:
+                export_pic_oney(xaxis, one_id, id2name[one_id], id2sortList[one_id], part_dir_path)
+            # 保存综合排名的图片
+            if save_type=="part":
                 export_pic_morey(xaxis, selected_students, id2name, id2sortList, part_dir_path)
-                messagebox.showinfo("提示", "已导出选中学生排名图片到: " + part_dir_path, parent=sort_toplevel)
+                messagebox.showinfo("提示", success_show_msg + part_dir_path, parent=sort_toplevel)
 
     # 在最上面中间位置添加一个按钮
     plot_button = ttk.Button(header_frame, text="选择学生", command=on_plot_button_click)
