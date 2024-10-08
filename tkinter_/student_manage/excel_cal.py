@@ -70,16 +70,15 @@ def write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_n
             single_score = data.iloc[row_end + 1, col_index]
             if pd.isna(single_score):
                 continue
-            dect_total = data.iloc[row_start:row_end, col_index].sum()
+            dect_total = data.iloc[row_start:row_end+1, col_index].sum()
             percentage = '%.2f'%((single_score * len(id2name) - dect_total) / (single_score * len(id2name)))
-            ws.cell(row=row_end + 1 + 2, column=col_index + 1, value=percentage)
+            ws.cell(row=row_end + 2 + 1, column=col_index + 1, value=percentage)
         except Exception as e:
             pass
 
     # 计算班级均分
-    total_score = '%.2f'%(data.iloc[row_start:row_end, col_end + 2].mean())
-    ws.cell(row=row_end + 1 + 2, column=col_end + 1 + 3, value=total_score)
-    print(total_score)
+    avg_score = '%.2f'%((len(id2deduct_score)*100 - sum(id2deduct_score.values())) / len(id2deduct_score))
+    ws.cell(row=row_end + 2 + 2, column=col_end + 1 + 3, value=avg_score)
     # 保存工作簿
     wb.save(filename)
 
