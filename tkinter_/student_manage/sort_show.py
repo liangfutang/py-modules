@@ -29,7 +29,7 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
     header_frame = ttk.Frame(sort_toplevel, padding="10")
     header_frame.pack(fill=tk.X)
 
-    plot_frame = ttk.Frame(sort_toplevel, padding="10")
+    plot_frame = ttk.Frame(sort_toplevel, padding=(10, 0, 10, 10))
     plot_frame.pack(fill=tk.BOTH, expand=True)
 
     def on_plot_button_click():
