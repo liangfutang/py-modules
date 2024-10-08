@@ -1,11 +1,14 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 import menu
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
 import matplotlib as mpl
 from matplotlib.ticker import MaxNLocator
+import matplotlib.pyplot as plt
+import os
+from datetime import datetime
 
 # 设置matplotlib的字体为支持中文的字体
 mpl.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
@@ -49,18 +52,75 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
         if len(selected_students) == 0:
             messagebox.showwarning("提示", "请先选择学生")
         else:
-            print(selected_students)
+            part_dir_path = filedialog.askdirectory(title="选择保存选中学生排名图片存储文件夹")
+            if part_dir_path:
+                part_dir_path = os.path.join(part_dir_path, "part", datetime.now().strftime("%Y%m%d%H%M%S"))
+                if not os.path.exists(part_dir_path):
+                    os.makedirs(part_dir_path, exist_ok=True)
+                # 保存单个学生排名的图片
+                for one_id in selected_students:
+                    export_pic_oney(xaxis, one_id, id2name[one_id], id2sortList[one_id], part_dir_path)
+                # 保存综合排名的图片
+                export_pic_morey(xaxis, selected_students, id2name, id2sortList, part_dir_path)
+                messagebox.showinfo("提示", "已导出选中学生排名图片到: " + part_dir_path)
 
     # 在最上面中间位置添加一个按钮
     plot_button = ttk.Button(header_frame, text="选择学生", command=on_plot_button_click)
     plot_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
-    plot_button = ttk.Button(header_frame, text="所有学生名次图", command=export_all_sort_pic)
+    plot_button = ttk.Button(header_frame, text="保存所有学生名次", command=export_all_sort_pic)
     plot_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
-    plot_button = ttk.Button(header_frame, text="选中学生名次图", command=export_selected_sort_pic)
+    plot_button = ttk.Button(header_frame, text="保存选中学生名次", command=export_selected_sort_pic)
     plot_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
 
     return header_frame, plot_frame
 
+# 保存多个学生排名的图片
+def export_pic_morey(xaxis, selected_students, id2name, id2sortList, dir_path):
+    # 创建一个新的图形窗口
+    plt.figure()
+    # 添加标题和轴标签
+    plt.title('学生排名图')
+    plt.xlabel('单元')
+    plt.ylabel('排名')
+    # 设置 y 轴的刻度为整数
+    plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+    # 添加栅格线
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray')
+    # 为每个选定的学生绘制折线图
+    for student_id in selected_students:
+        name = id2name[student_id]
+        sort_list = id2sortList[student_id]
+        y_values = [y if y is not None else np.nan for y in sort_list]  # 处理None值
+        plt.plot(xaxis, y_values, marker='o', label=name)
+    # 显示图例
+    plt.legend()  # 确保调用 plt.legend() 来显示图例
+    # 保存图形到本地文件
+    file_path = os.path.join(dir_path, "+".join([str(student) for student in selected_students]) + '.png')
+    plt.savefig(file_path, dpi=300, bbox_inches='tight')
+    # 清除当前图形
+    plt.clf()
+
+# 保存单个学生排名的图片
+def export_pic_oney(xaxis, one_id, name, sortList, dir_path):
+    # 创建一个新的图形窗口
+    plt.figure()
+    # 绘制数据
+    plt.plot(xaxis, sortList, marker='o', label=name)
+    # 添加标题和轴标签
+    plt.title('学生排名图')
+    plt.xlabel('单元')
+    plt.ylabel('排名')
+    # 设置 y 轴的刻度为整数
+    plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+    # 添加栅格线
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray')
+    # 显示图例
+    plt.legend()  # 确保调用 plt.legend() 来显示图例
+    # 保存图形到本地文件
+    file_path = os.path.join(dir_path, f'{name}({one_id}).png')
+    plt.savefig(file_path, dpi=300, bbox_inches='tight')
+    # 清除当前图形
+    plt.clf()
 def show_multiselect_dialog(root, id2name):
     selected_students = []
     def on_select():
