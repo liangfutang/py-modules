@@ -119,7 +119,7 @@ class Application(tk.Frame):
             if askback:
                 xls = ExcelFile(filename)
                 sheet_names = xls.sheet_names
-                data = read_excel(filename, sheet_name=sheet_names[0])
+                data = read_excel(filename, sheet_name=sheet_names[0], header=None)
                 try:
                     SortShow(data)
                 except PermissionError as e:
