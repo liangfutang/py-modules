@@ -17,6 +17,7 @@ mpl.rcParams['axes.unicode_minus'] = False  # 解决负号'-'显示为方块的�
 title = '学生单元考试排名曲线'
 xlabel = '单元'
 ylabel = '排名'
+
 def SortShow(data):
     # 清除现有内容
     sort_toplevel = tk.Toplevel()
@@ -46,14 +47,14 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
         if len(selected_students) != 0:
             echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame)
         else:
-            messagebox.showwarning("提示", "至少选择一个学生")
+            messagebox.showwarning("提示", "至少选择一个学生", parent=sort_toplevel)
 
     def export_all_sort_pic():
         pass
 
     def export_selected_sort_pic():
         if len(selected_students) == 0:
-            messagebox.showwarning("提示", "请先选择学生")
+            messagebox.showwarning("提示", "请先选择学生", parent=sort_toplevel)
         else:
             part_dir_path = filedialog.askdirectory(title="选择保存选中学生排名图片存储文件夹")
             if part_dir_path:
@@ -65,7 +66,7 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
                     export_pic_oney(xaxis, one_id, id2name[one_id], id2sortList[one_id], part_dir_path)
                 # 保存综合排名的图片
                 export_pic_morey(xaxis, selected_students, id2name, id2sortList, part_dir_path)
-                messagebox.showinfo("提示", "已导出选中学生排名图片到: " + part_dir_path)
+                messagebox.showinfo("提示", "已导出选中学生排名图片到: " + part_dir_path, parent=sort_toplevel)
 
     # 在最上面中间位置添加一个按钮
     plot_button = ttk.Button(header_frame, text="选择学生", command=on_plot_button_click)
