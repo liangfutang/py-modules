@@ -50,7 +50,7 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
             messagebox.showwarning("提示", "至少选择一个学生", parent=sort_toplevel)
 
     def export_all_sort_pic():
-        pass
+        save_selected(id2name.keys(), "选择保存所有学生排名图片存储文件夹", "all", "已导出所有学生排名图片到: ")
 
     def export_selected_sort_pic():
         if len(selected_students) == 0:
@@ -129,6 +129,7 @@ def export_pic_oney(xaxis, one_id, name, sortList, dir_path):
     plt.savefig(file_path, dpi=300, bbox_inches='tight')
     # 清除当前图形
     plt.clf()
+    plt.close()
 def show_multiselect_dialog(root, id2name):
     selected_students = []
     def on_select():
