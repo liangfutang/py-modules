@@ -33,17 +33,31 @@ def init_sort_win(sort_toplevel, id2name, id2sortList, xaxis):
     plot_frame = ttk.Frame(sort_toplevel, padding=(10, 0, 10, 10))
     plot_frame.pack(fill=tk.BOTH, expand=True)
 
+    selected_students = []
     def on_plot_button_click():
-        selected_students = show_multiselect_dialog(sort_toplevel, id2name)
+        selected_students.clear()
+        selected_students.extend(show_multiselect_dialog(sort_toplevel, id2name))
         if len(selected_students) != 0:
             echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame)
         else:
             messagebox.showwarning("提示", "至少选择一个学生")
+
+    def export_all_sort_pic():
+        pass
+
+    def export_selected_sort_pic():
+        if len(selected_students) == 0:
+            messagebox.showwarning("提示", "请先选择学生")
+        else:
             print(selected_students)
 
     # 在最上面中间位置添加一个按钮
     plot_button = ttk.Button(header_frame, text="选择学生", command=on_plot_button_click)
-    plot_button.pack(side=tk.TOP, pady=10)
+    plot_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
+    plot_button = ttk.Button(header_frame, text="所有学生名次图", command=export_all_sort_pic)
+    plot_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
+    plot_button = ttk.Button(header_frame, text="选中学生名次图", command=export_selected_sort_pic)
+    plot_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
 
     return header_frame, plot_frame
 
