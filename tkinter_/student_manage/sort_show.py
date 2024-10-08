@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
 import matplotlib as mpl
+from matplotlib.ticker import MaxNLocator
 
 # 设置matplotlib的字体为支持中文的字体
 mpl.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
@@ -149,6 +150,10 @@ def echarts_show(xaxis, id2name, id2sortList, selected_students, plot_frame):
     ax.set_title('学生排名图')
     ax.set_xticks(np.arange(len(xaxis)))
     ax.set_xticklabels(xaxis, rotation=45, ha='right')
+    # 设置y轴刻度为整数
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+    # 添加栅格
+    ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray')  # 启用网格线，并设置样式
 
     # 为每个选定的学生绘制折线图
     for student_id in selected_students:
