@@ -41,14 +41,6 @@ class Application(tk.Frame):
         choose_but = tk.Button(container, text="排名曲线", command=self.sort_show)
         choose_but.grid(row=3, column=0, columnspan=2, pady=10)
 
-    def resource_path(self, relative_path):
-        """获取打包后文件的路径"""
-        try:
-            base_path = sys._MEIPASS
-        except Exception:
-            base_path = os.path.abspath(".")
-
-        return os.path.join(base_path, relative_path)
     def download_file(self):
         options_cal = ["数学成绩统计模板501.xlsx", "数学成绩统计模板502.xlsx"]
         options_sort = ["数学成绩排名模板501.xlsx", "数学成绩排名模板502.xlsx"]
@@ -67,7 +59,7 @@ class Application(tk.Frame):
         folder_path = filedialog.askdirectory(title="选择保存文件的文件夹")
         if folder_path:  # 如果用户选择了文件夹
             # 指定要下载的文件路径（项目中的文件）
-            source_dir = self.resource_path("templates")
+            source_dir = os.path.join(os.path.abspath("."), "templates")
 
             try:
                 # 将文件复制到目标文件夹
