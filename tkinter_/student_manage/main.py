@@ -4,7 +4,6 @@ from pandas import ExcelFile, read_excel
 from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
 import os
-import sys
 import menu
 from sort_show import SortShow
 
