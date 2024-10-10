@@ -31,7 +31,7 @@ pipenv shell
 
 # 生成可执行文件
 ```shell
-pyinstaller --onefile --noconsole --add-data="templates;templates"  main.py
+pyinstaller --onefile --noconsole --add-data="templates;templates" --strip main.py
 ```
 
 # 删除虚拟环境
