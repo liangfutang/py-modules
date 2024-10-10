@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 
 import pandas as pd
+import numpy as np
 
 # 计算总分并返回学号和姓名、学号和总分的字典
 # id2deduct_score：key:学号，value:扣分
@@ -13,8 +14,12 @@ def cal_total_score(data):
         # 过滤掉不是学号的列
         if not isinstance(row.values[0], int):
             continue
+        def is_plus_number(value):
+            return isinstance(value, str) and value.startswith('+')
         # 统计每一个学号对应的分数
-        deduct_points = row[col_start:col_end].sum()
+        # 将带加号的字符串转换为NaN
+        row_cleaned = row[col_start:col_end+1].apply(lambda x: np.nan if is_plus_number(x) else x)
+        deduct_points = pd.to_numeric(row_cleaned, errors='coerce').sum(skipna=True)
         id2deduct_score[row.values[0]] = deduct_points
         id2name[row.values[0]] = row.values[1]
         row_end = index

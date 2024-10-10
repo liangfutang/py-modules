@@ -31,7 +31,7 @@ pipenv shell
 
 # 生成可执行文件
 ```shell
-pyinstaller --onefile --noconsole --add-data="templates;templates" --strip main.py
+pyinstaller --onefile --noconsole --add-data="templates;templates" --strip --clean main.py
 ```
 
 # 删除虚拟环境
@@ -40,4 +40,10 @@ pipenv --clear
 pipenv --rm
 rm Pipfile 
 rm Pipfile.lock
+```
+
+# 后续需求安排
+```
+1. 程序运行时，自动检测更新
+2. 优化代码结构
 ```
