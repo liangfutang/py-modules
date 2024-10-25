@@ -91,7 +91,7 @@ class Application(tk.Frame):
                 id2deduct_score, id2name, row_start, row_end, col_start, col_end = cal_total_score(data, ws)
                 id2sort = sort_total_score(id2deduct_score)
                 try:
-                    write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_names[0], row_start, row_end, col_start, col_end)
+                    write_total_score(id2deduct_score, id2name, id2sort, data, filename, wb, ws, row_start, row_end, col_start, col_end)
                     messagebox.showinfo("success", "成绩统计完成")
                 except PermissionError as e:
                     messagebox.showwarning("PermissionError", "文件正在被占用，请关闭文件后再试")

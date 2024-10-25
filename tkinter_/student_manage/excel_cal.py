@@ -45,11 +45,7 @@ def sort_total_score(id2deduct_score):
     return id2sort
 
 # 将总分和排名写回到表格中
-def write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_name, row_start, row_end, col_start, col_end):
-    # 加载工作簿
-    wb = load_workbook(filename)
-    ws = wb[sheet_name]
-
+def write_total_score(id2deduct_score, id2name, id2sort, data, filename, wb, ws, row_start, row_end, col_start, col_end):
     # 遍历每一行并在指定列写入数据
     deduct_index, id_index = cal_write_index(data)
     id_sort = list(id2sort.items())
