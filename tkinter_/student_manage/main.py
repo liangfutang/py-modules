@@ -4,6 +4,7 @@ from pandas import ExcelFile, read_excel
 from excel_cal import cal_total_score, sort_total_score, write_total_score
 import shutil
 import os
+import sys
 import menu
 from sort_show import SortShow
 from openpyxl import load_workbook
@@ -62,9 +63,13 @@ class Application(tk.Frame):
             source_dir = os.path.join(os.path.abspath("."), "templates")
 
             try:
+                def resource_path(relative_path):
+                    """ Get absolute path to resource, works for dev and for PyInstaller """
+                    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+                    return os.path.join(base_path, relative_path)
                 # 将文件复制到目标文件夹
                 for item in dialog.selected_options:
-                    source_file = os.path.join(source_dir, item)
+                    source_file = resource_path(os.path.join("templates", item))
                     destination_file = os.path.join(folder_path, item)
                     shutil.copy(source_file, destination_file)
                 messagebox.showinfo("下载", f"文件已保存到: {folder_path}")
