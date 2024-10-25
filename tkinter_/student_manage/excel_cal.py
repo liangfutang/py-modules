@@ -5,7 +5,7 @@ import numpy as np
 
 # 计算总分并返回学号和姓名、学号和总分的字典
 # id2deduct_score：key:学号，value:扣分
-def cal_total_score(data):
+def cal_total_score(data, ws):
     id2deduct_score = {}
     id2name = {}
     col_start, col_end = cal_deduct_score_range(data)
@@ -13,6 +13,10 @@ def cal_total_score(data):
     for index, row in data.iterrows():
         # 过滤掉不是学号的列
         if not isinstance(row.values[0], int):
+            continue
+        # 过滤掉没有考试的学生
+        cell_bg_color = ws.cell(row=index+2, column=1).fill.start_color.index
+        if cell_bg_color != '00000000' and cell_bg_color != 0:
             continue
         def is_plus_number(value):
             return isinstance(value, str) and value.startswith('+')
@@ -49,17 +53,24 @@ def write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_n
     # 遍历每一行并在指定列写入数据
     deduct_index, id_index = cal_write_index(data)
     id_sort = list(id2sort.items())
+    no_examination_count = 0
     for index, row in data.iterrows():
-        # 过滤掉不是学号的列
+        c_id = row.values[0]
+        # 过滤掉不是学号的列 和 没有分数的行
         if not isinstance(row.values[0], int):
             continue
-        # 假设我们将结果写入 'B' 列（Excel中的第2列）
-        c_id = row.values[0]
-        ws.cell(row=index + 2, column=deduct_index, value=id2deduct_score[c_id])
-        ws.cell(row=index + 2, column=deduct_index + 1, value=100-id2deduct_score[c_id])  # +2是因为 DataFrame 索引从 0 开始，Excel 从 1 开始，且第一行通常是表头
-        ws.cell(row=index + 2, column=deduct_index + 2, value=id2sort[c_id])
+        #  扣分项的单独统计，如果没有成绩则不参与统计
+        if id2deduct_score.get(c_id) is None:
+            no_examination_count += 1
+        else:
+            # 假设我们将结果写入 'B' 列（Excel中的第2列）
+            ws.cell(row=index + 2, column=deduct_index, value=id2deduct_score[c_id])
+            ws.cell(row=index + 2, column=deduct_index + 1, value=100-id2deduct_score[c_id])  # +2是因为 DataFrame 索引从 0 开始，Excel 从 1 开始，且第一行通常是表头
+            ws.cell(row=index + 2, column=deduct_index + 2, value=id2sort[c_id])
 
+        # 后面顺序统计项，不空行连续展示
         # 统计表中获取本行的学号
+        index = index - no_examination_count
         s_id, sort = id_sort[index-1]
         ws.cell(row=index + 2, column=id_index, value=s_id)
         ws.cell(row=index + 2, column=id_index + 1, value=id2name[s_id])

@@ -6,6 +6,7 @@ import shutil
 import os
 import menu
 from sort_show import SortShow
+from openpyxl import load_workbook
 
 def center_window(root, width, height):
     # 获取屏幕尺寸
@@ -84,7 +85,10 @@ class Application(tk.Frame):
                 xls = ExcelFile(filename)
                 sheet_names = xls.sheet_names
                 data = read_excel(filename, sheet_name=sheet_names[0])
-                id2deduct_score, id2name, row_start, row_end, col_start, col_end = cal_total_score(data)
+                # 加载 Excel 文件
+                wb = load_workbook(filename)
+                ws = wb[sheet_names[0]]
+                id2deduct_score, id2name, row_start, row_end, col_start, col_end = cal_total_score(data, ws)
                 id2sort = sort_total_score(id2deduct_score)
                 try:
                     write_total_score(id2deduct_score, id2name, id2sort, data, filename, sheet_names[0], row_start, row_end, col_start, col_end)
