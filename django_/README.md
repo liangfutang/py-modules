@@ -19,3 +19,7 @@ python manage.py makemigrations db_mysql
 ```shell
 python manage.py migrate
 ```
+探测数据库并生成映射类
+```shell
+python manage.py inspectdb > db_mysql/models.py
+```
