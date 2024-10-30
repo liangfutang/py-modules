@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.db import connection
 from .models import Book
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -14,6 +15,7 @@ def native_select(request):
     return HttpResponse("ok")
 
 # 使用orm方式查数据库表数据
+@csrf_exempt
 def orm_select(request):
     books = Book.objects.all()
     for book in books:
