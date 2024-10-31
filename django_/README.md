@@ -1,6 +1,8 @@
 # 创建并运行dockers
 创建镜像
-
+```shell
+docker buildx build --platform linux/amd64 -t django_p:latest .
+```
 
 # 相关预计
 新建项目
