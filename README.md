@@ -24,4 +24,6 @@ pyenv global 3.12.2
 pipenv --venv
 # 为项目安装虚拟环境
 pipenv install
+# 卸载当前虚拟环境
+pipenv --rm
 ```
