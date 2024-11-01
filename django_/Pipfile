@@ -6,6 +6,7 @@ name = "pip_conf_index_global"
 [packages]
 django = "*"
 pymysql = "*"
+djangorestframework = '*'
 
 [dev-packages]
 

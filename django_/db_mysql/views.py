@@ -2,6 +2,9 @@ from django.shortcuts import render, HttpResponse
 from django.db import connection
 from .models import Book
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
+from .models import Book
+from .serializers import BookSerializer
 
 # Create your views here.
 
@@ -21,3 +24,7 @@ def orm_select(request):
     for book in books:
         print(f'(id:{book.id}, name:{book.name}, price:{book.price}, price:{book.create_time}, price:{book.update_time})')
     return HttpResponse("ok")
+
+class BookList(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
