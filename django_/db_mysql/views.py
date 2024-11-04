@@ -1,10 +1,11 @@
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse
 from django.db import connection
-from .models import Book
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
+from rest_framework.views import APIView
 
 # Create your views here.
 
@@ -28,3 +29,26 @@ def orm_select(request):
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+class BookView(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Book.objects.all()
+        serializer = BookSerializer(queryset, many=True)
+        return JsonResponse({
+            "status": 200,
+            "data": serializer.data
+        }, safe=False)
+
+    def post(self, request, *args, **kwargs):
+        serializer = BookSerializer(data=request.data)
+        message = {"status": 200}
+        return JsonResponse(message, safe=False)
+
+    def put(self, request, *args, **kwargs):
+        print("这是一个put方法")
+        message = {"status": 200}
+        return JsonResponse(message, safe=False)
+
+    def delete(self, request, *args, **kwargs):
+        message = {"status": 200}
+        return JsonResponse(message, safe=False)

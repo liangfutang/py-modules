@@ -17,9 +17,11 @@ Including another URLconf
 from django.urls import path
 from . import views
 from .views import BookList
+from .views import BookView
 
 urlpatterns = [
     path('native_select/', views.native_select),
     path('orm_select/', views.orm_select),
-    path("drf/list/", BookList.as_view())
+    path("drf/list/", BookList.as_view()),
+    path("drf/view/", BookView.as_view())
 ]
