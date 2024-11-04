@@ -6,6 +6,7 @@ from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.views import APIView
+import utils.results as results
 
 # Create your views here.
 
@@ -40,9 +41,9 @@ class BookView(APIView):
         }, safe=False)
 
     def post(self, request, *args, **kwargs):
-        serializer = BookSerializer(data=request.data)
-        message = {"status": 200}
-        return JsonResponse(message, safe=False)
+        queryset = Book.objects.all()
+        serializer = BookSerializer(queryset, many=True)
+        return results.success(data=serializer.data)
 
     def put(self, request, *args, **kwargs):
         print("这是一个put方法")
