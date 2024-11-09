@@ -9,6 +9,9 @@ docker buildx build --platform linux/amd64 -t django_p:latest .
 ```shell
 Django-admin startproject django
 ```
+```shell
+Django-admin startproject config . 
+```
 新建模块
 ```shell
 python manage.py startapp db_mysql
