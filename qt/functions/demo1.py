@@ -1,5 +1,18 @@
 from PySide2.QtWidgets import QApplication, QMessageBox
 from PySide2.QtUiTools import QUiLoader
+from PySide2.QtCore import QFile
+import sys, os
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class Stats:
 
@@ -9,9 +22,13 @@ class Stats:
         # 从 UI 定义中动态 创建一个相应的窗口对象
         # 注意：里面的控件对象也成为窗口对象的属性了
         # 比如 self.ui.button , self.ui.textEdit
-        self.ui = QUiLoader().load('./ui/stats.ui')
+        ui_file_path = resource_path('ui/httpclient.ui')
+        ui_file = QFile(ui_file_path)
+        ui_file.open(QFile.ReadOnly)
+        self.ui = QUiLoader().load(ui_file)
+        ui_file.close()
 
-        self.ui.button.clicked.connect(self.handleCalc)
+        # self.ui.button.clicked.connect(self.handleCalc)
 
     def handleCalc(self):
         info = self.ui.textEdit.toPlainText()
