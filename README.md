@@ -27,3 +27,8 @@ pipenv install
 # 卸载当前虚拟环境
 pipenv --rm
 ```
+
+# 使用HM NIS Edit制作出非常正式的安装包
+```shell
+https://zhuanlan.zhihu.com/p/62711476
+```
