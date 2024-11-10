@@ -127,9 +127,23 @@
        </item>
        <item>
         <widget class="QTableWidget" name="headTable">
+         <property name="styleSheet">
+          <string notr="true">QHeaderView::section {
+	border-top:0px solid #E5E5E5;
+	border-left:0px solid #E5E5E5;
+	border-right:0.5px solid #E5E5E5;
+	border-bottom: 0.5px solid #E5E5E5;
+}</string>
+         </property>
          <property name="columnCount">
           <number>2</number>
          </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderStretchLastSection">
+          <bool>false</bool>
+         </attribute>
          <column>
           <property name="text">
            <string>名称</string>
@@ -194,7 +208,16 @@
     </widget>
    </item>
    <item>
-    <widget class="QPlainTextEdit" name="resultShowInput"/>
+    <widget class="QPlainTextEdit" name="resultShowInput">
+     <property name="styleSheet">
+      <string notr="true">QHeaderView::section {
+	border-top:0px solid #E5E5E5;
+	border-left:0px solid #E5E5E5;
+	border-right:0.5px solid #E5E5E5;
+	border-bottom: 0.5px solid #E5E5E5;
+}</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
