@@ -14,13 +14,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from db_mysql import urls as db_mysql_urls
-from hydm import urls as hydm_urls
+from django.urls import path
+from .views import Login
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('db_mysql/', include(db_mysql_urls)),
-    path('hydm/', include(hydm_urls)),
+    path('login', Login.as_view()),
 ]
