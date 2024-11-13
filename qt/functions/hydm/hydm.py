@@ -33,11 +33,17 @@ class Win_Login:
         SI.mainWin = Win_main()
         SI.mainWin.ui.show()
 
-        self.ui.edit_username.setText('')
+        self.ui.edit_password.setText('')
         self.ui.hide()
 class Win_main:
     def __init__(self):
         self.ui = ui_load('main.ui')
+        self.ui.actionExit.triggered.connect(self.onSignOut)
+
+    def onSignOut(self):
+        SI.mainWin.ui.hide()
+        SI.loginWin.ui.show()
+
 
 app = QApplication([])
 SI.loginWin = Win_Login()
