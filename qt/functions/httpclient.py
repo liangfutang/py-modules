@@ -1,15 +1,7 @@
-from PySide2.QtWidgets import QApplication, QMessageBox
-from PySide2.QtUiTools import QUiLoader
-from PySide2.QtCore import QFile
-import sys, os
+from PySide2.QtWidgets import QApplication
 
+from utils.fileUtil import ui_load
 
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
 
 class ButtonOperate:
     def __init__(self, ui):
@@ -42,11 +34,7 @@ class ButtonOperate:
 class Stats:
 
     def __init__(self):
-        ui_file_path = resource_path('ui/httpclient.ui')
-        ui_file = QFile(ui_file_path)
-        ui_file.open(QFile.ReadOnly)
-        self.ui = QUiLoader().load(ui_file)
-        ui_file.close()
+        self.ui = ui_load('ui/httpclient.ui')
         # 按钮的信号和槽
         ButtonOperate(self.ui)
 
