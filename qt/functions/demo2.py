@@ -1,6 +1,6 @@
 from PySide2.QtCore import Qt, QPropertyAnimation, QEasingCurve, QPoint, QPointF
 from PySide2.QtGui import QMouseEvent
-from PySide2.QtWidgets import QWidget, QApplication
+from PySide2.QtWidgets import QWidget, QApplication, QVBoxLayout, QLineEdit, QPushButton, QGridLayout
 
 
 class CDrawer(QWidget):
@@ -171,17 +171,6 @@ class CDrawer(QWidget):
         if direction < 0 or direction > 3:
             direction = self.LEFT
         self.direction = direction
-
-# 启动应用
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QWidget, QGridLayout, QPushButton, QVBoxLayout,\
-    QLineEdit
-
-
-
-__Author__ = 'Irony'
-__Copyright__ = 'Copyright (c) 2019'
-
 
 class DrawerWidget(QWidget):
 
