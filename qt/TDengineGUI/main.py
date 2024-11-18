@@ -169,8 +169,7 @@ class CDrawer(QWidget):
             easingCurve=QEasingCurve.OutCubic)
         self.animOut.setPropertyName(b'pos')
         self.animOut.setDuration(500)
-        self.setStretch(stretch)  # 占比
-        self.direction = direction  # 方向
+        self.stretch = max(0.1, min(stretch, 0.9))  # 占比
         # 半透明背景
         self.alphaWidget = QWidget(
             self, objectName='CDrawer_alphaWidget',
@@ -239,27 +238,6 @@ class CDrawer(QWidget):
             widget.setParent(self)
             self.animIn.setTargetObject(widget)
             self.animOut.setTargetObject(widget)
-    def setEasingCurve(self, easingCurve):
-        """设置动画曲线
-        :param easingCurve:
-        """
-        self.animIn.setEasingCurve(easingCurve)
-
-    def setStretch(self, stretch):
-        """设置占比
-        :param stretch:
-        """
-        self.stretch = max(0.1, min(stretch, 0.9))
-
-    def getDirection(self):
-        """获取方向
-        """
-        return self.direction
-
-    def getStretch(self):
-        """获取占比
-        """
-        return self.stretch
 
 
 class Window():
