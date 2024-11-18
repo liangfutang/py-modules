@@ -7,3 +7,8 @@
 # --hidden-import PySide6.QtXml 参数是因为这个 QtXml库是动态导入，PyInstaller没法分析出来，需要我们告诉它，
 pyinstaller demo1.py --onefile --noconsole --add-data="ui;ui" --strip --clean --hidden-import PySide6.QtXml
 ```
+
+2. ui转python
+```shell
+pyside2-uic ./ui/test.ui -o ./ui/output_file.py
+```
