@@ -154,7 +154,6 @@ class DrawerWidget(QWidget):
 
 class CDrawer(QWidget):
 
-    LEFT, TOP, RIGHT, BOTTOM = range(4)
     def __init__(self, *args, stretch=1 / 3, direction=0, widget=None, **kwargs):
         super(CDrawer, self).__init__(*args, **kwargs)
         self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.NoDropShadowWindowHint)
@@ -203,28 +202,26 @@ class CDrawer(QWidget):
 
     def animationIn(self, geometry):
         """进入动画
-                :param geometry:
-                """
-        if self.direction == self.LEFT:
-            # 左侧抽屉
-            self.widget.setGeometry(
-                0, 0, int(geometry.width() * self.stretch), geometry.height())
-            self.widget.hide()
-            self.animIn.setStartValue(QPoint(-self.widget.width(), 0))
-            self.animIn.setEndValue(QPoint(0, 0))
-            self.animIn.start()
-            self.widget.show()
+        :param geometry:
+        """
+        # 左侧抽屉
+        self.widget.setGeometry(
+            0, 0, int(geometry.width() * self.stretch), geometry.height())
+        self.widget.hide()
+        self.animIn.setStartValue(QPoint(-self.widget.width(), 0))
+        self.animIn.setEndValue(QPoint(0, 0))
+        self.animIn.start()
+        self.widget.show()
 
     def animationOut(self):
         """离开动画
         """
         self.animIn.stop()  # 停止进入动画
         geometry = self.widget.geometry()
-        if self.direction == self.LEFT:
-            # 左侧抽屉
-            self.animOut.setStartValue(geometry.topLeft())
-            self.animOut.setEndValue(QPoint(-self.widget.width(), 0))
-            self.animOut.start()
+        # 左侧抽屉
+        self.animOut.setStartValue(geometry.topLeft())
+        self.animOut.setEndValue(QPoint(-self.widget.width(), 0))
+        self.animOut.start()
 
     def onAnimOutEnd(self):
         """离开动画结束
@@ -264,14 +261,6 @@ class CDrawer(QWidget):
         """
         return self.stretch
 
-    def setDirection(self, direction):
-        """设置方向
-        :param direction:
-        """
-        direction = int(direction)
-        if direction < 0 or direction > 3:
-            direction = self.LEFT
-        self.direction = direction
 
 class Window():
     def __init__(self, *args, **kwargs):
@@ -281,7 +270,7 @@ class Window():
         self.ui.pushButton.clicked.connect(self.doOpenLeft)
     def doOpenLeft(self):
         if not hasattr(self, 'leftDrawer'):
-            self.leftDrawer = CDrawer(self.w, direction=CDrawer.LEFT)
+            self.leftDrawer = CDrawer(self.w)
             self.leftDrawer.setWidget(DrawerWidget(self.leftDrawer))
         self.leftDrawer.show()
 
