@@ -26,19 +26,70 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
+     <widget class="QWidget" name="sideBar" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>数据库</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="sideNewConnectBtn">
+         <property name="styleSheet">
+          <string notr="true">#sideNewConnectBtn {
+	background-color: #ecf5ff; /* 浅蓝色背景 */
+    border: 0.5px solid #007bff;
+    color: #409eff; /* 文字颜色为深蓝色 */
+    padding: 10px 20px; /* 内边距 */
+    text-align: center;
+    font-size: 13px; /* 字体大小 */
+    cursor: pointer; /* 鼠标悬停时变为手形指针 */
+    border-radius: 5px; /* 圆角 */
+}
+
+#sideNewConnectBtn:hover {
+	background-color: #409eff;
+	color:#fff;
+	cursor: pointer;
+}</string>
+         </property>
+         <property name="text">
+          <string>新建连接</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="stableTab">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>超级表</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,4">
           <item>
-           <widget class="QListWidget" name="listWidget"/>
+           <widget class="QListWidget" name="stableListShow"/>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout" stretch="1,15">
@@ -76,7 +127,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="tableTab">
        <attribute name="title">
         <string>Tab 2</string>
        </attribute>
@@ -100,7 +151,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

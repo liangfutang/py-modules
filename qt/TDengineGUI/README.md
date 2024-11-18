@@ -10,5 +10,5 @@ pyinstaller demo1.py --onefile --noconsole --add-data="ui;ui" --strip --clean --
 
 2. ui转python
 ```shell
-pyside2-uic ./ui/test.ui -o ./ui/output_file.py
+pyside2-uic ./ui/MainWindow.ui -o ./ui/output_file.py
 ```
