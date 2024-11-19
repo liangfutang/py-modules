@@ -200,6 +200,14 @@
              <height>30</height>
             </size>
            </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#newConnectCloseLab {
+	color: rgb(85, 170, 255);
+}</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -448,6 +456,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="cancalBtn">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string>取消</string>
            </property>
@@ -455,6 +466,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="confirmBtn">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="styleSheet">
             <string notr="true">#confirmBtn {
 	background-color: rgb(64, 158, 255);

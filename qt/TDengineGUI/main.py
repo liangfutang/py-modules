@@ -171,7 +171,7 @@ class DrawerWidget(QWidget):
 
 class CDrawer(QWidget):
 
-    def __init__(self, *args, stretch=1 / 3, direction=0, widget=None, **kwargs):
+    def __init__(self, *args, stretch=1 / 3, widget=None, **kwargs):
         super(CDrawer, self).__init__(*args, **kwargs)
         self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.NoDropShadowWindowHint)
         self.setAttribute(Qt.WA_StyledBackground, True)
@@ -535,36 +535,6 @@ class NewConnection(QWidget):
         if widget:
             widget.setParent(self)
 
-    def setEasingCurve(self, easingCurve):
-        """设置动画曲线
-        :param easingCurve:
-        """
-        self.animIn.setEasingCurve(easingCurve)
-
-    def getStretch(self):
-        """获取占比
-        """
-        return self.stretch
-
-    def setStretch(self, stretch):
-        """设置占比
-        :param stretch:
-        """
-        self.stretch = max(0.1, min(stretch, 0.9))
-
-    def getDirection(self):
-        """获取方向
-        """
-        return self.direction
-
-    def setDirection(self, direction):
-        """设置方向
-        :param direction:
-        """
-        direction = int(direction)
-        if direction < 0 or direction > 3:
-            direction = self.LEFT
-        self.direction = direction
 
 class Window():
     def __init__(self, *args, **kwargs):
