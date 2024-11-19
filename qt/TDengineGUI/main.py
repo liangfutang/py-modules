@@ -284,6 +284,10 @@ class NewConnectionWidget(QWidget):
         self.newConnectCloseLab.setObjectName(u"newConnectCloseLab")
         self.newConnectCloseLab.setMinimumSize(QSize(30, 30))
         self.newConnectCloseLab.setMaximumSize(QSize(30, 30))
+        self.newConnectCloseLab.setCursor(QCursor(Qt.PointingHandCursor))
+        self.newConnectCloseLab.setStyleSheet(u"#newConnectCloseLab {\n"
+                                              "	color: rgb(85, 170, 255);\n"
+                                              "}")
         self.newConnectCloseLab.setPixmap(QPixmap(u"./images/close_win.png"))
         self.newConnectCloseLab.setScaledContents(True)
         self.newConnectCloseLab.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -440,11 +444,13 @@ class NewConnectionWidget(QWidget):
 
         self.cancalBtn = QPushButton(self)
         self.cancalBtn.setObjectName(u"cancalBtn")
+        self.cancalBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.horizontalLayout_11.addWidget(self.cancalBtn)
 
         self.confirmBtn = QPushButton(self)
         self.confirmBtn.setObjectName(u"confirmBtn")
+        self.confirmBtn.setCursor(QCursor(Qt.PointingHandCursor))
         self.confirmBtn.setStyleSheet(u"#confirmBtn {\n"
                                       "	background-color: rgb(64, 158, 255);\n"
                                       "	color: rgb(255, 255, 255);\n"
@@ -468,8 +474,8 @@ class NewConnectionWidget(QWidget):
         self.newConnectCloseLab.mouseReleaseEvent = self.on_click_close_new_conn
 
     def cancalNewConnect(self):
-        self.destroy()
         self.parent().alphaWidget.close()
+        self.close()
 
     def on_click_close_new_conn(self, event):
         # 检查是否是左键释放
