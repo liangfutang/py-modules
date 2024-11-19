@@ -474,8 +474,10 @@ class NewConnectionWidget(QWidget):
         self.newConnectCloseLab.mouseReleaseEvent = self.on_click_close_new_conn
 
     def cancalNewConnect(self):
-        self.parent().alphaWidget.close()
         self.close()
+        QApplication.sendEvent(self, QMouseEvent(
+            QMouseEvent.MouseButtonPress, QPointF(-1, -1), Qt.LeftButton, Qt.NoButton, Qt.NoModifier))
+
 
     def on_click_close_new_conn(self, event):
         # 检查是否是左键释放
