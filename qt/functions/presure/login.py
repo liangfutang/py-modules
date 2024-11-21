@@ -1,8 +1,11 @@
 import requests
-from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox
+from PySide2.QtWidgets import QWidget, QMessageBox
+
+from qt.functions.presure.home import Win_home
+from qt.functions.presure.libs.presureShare import AC, SI
 from qt.functions.utils.fileUtil import ui_load
 from qt.functions.utils.paramValid import blank
-from qt.functions.presure.libs.presureShare import SI, AC
+
 
 class Win_Login(QWidget):
     def __init__(self):
@@ -29,19 +32,8 @@ class Win_Login(QWidget):
         # 保存token
         AC.token = resJson["data"]["accessToken"]
         # 跳转
-        SI.mainWin = Win_main()
+        SI.mainWin = Win_home()
         SI.mainWin.ui.show()
         # 影藏当前登录页面
         # self.ui.edit_password.setText('')
         self.ui.hide()
-
-
-class Win_main(QMainWindow):
-    def __init__(self):
-        self.ui = ui_load('main.ui')
-
-
-app = QApplication([])
-SI.loginWin = Win_Login()
-SI.loginWin.ui.show()
-app.exec_()
