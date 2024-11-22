@@ -18,14 +18,7 @@ class Win_home(QMainWindow):
             styleSheet='#aaa{background:rgba(55,55,55,100);}')
         self.alphaWidget.setAttribute(Qt.WA_TransparentForMouseEvents, True)
         self.alphaWidget.resize(self.ui.size())  # 设置 alphaWidget 的大小
-
-
-        self.login = ui_load('login.ui')
-        self.login.setGeometry((self.ui.width()-self.login.width())/2, (self.ui.height()-self.login.height())/2, self.login.width(), self.login.height())
-        self.login.setParent(self.ui)
-        loginUiName = self.login.objectName()
-        self.login.setStyleSheet('#' + loginUiName + '{background-color:red;}')
-
-    # def resizeEvent(self, event):
-    #     self.alphaWidget.resize(self.size())
-    #     super(Win_home, self).resizeEvent(event)
+        # 主界面上弹窗显示
+        self.createTaskUi = ui_load('createTask.ui')
+        self.createTaskUi.setGeometry((self.ui.width()-self.createTaskUi.width())/2, (self.ui.height()-self.createTaskUi.height())/2, self.createTaskUi.width(), self.createTaskUi.height())
+        self.createTaskUi.setParent(self.ui)
