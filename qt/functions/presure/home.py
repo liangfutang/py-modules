@@ -1,5 +1,5 @@
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QMainWindow, QWidget
+from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout
 
 from qt.functions.utils.fileUtil import ui_load
 
@@ -26,6 +26,7 @@ class Win_home(QMainWindow):
         self.createTaskUi.setParent(self.ui)
         self.createTaskUi.cancalNewConnectBtn.clicked.connect(self.cancalNewConnect)
         self.createTaskUi.confirmNewConnectBtn.clicked.connect(self.confirmNewConnect)
+        self.createTaskUi.addOneDeviceBtn.clicked.connect(self.addOneDevice)
 
         # 隐藏弹窗
         self.alphaWidget.hide()
@@ -48,6 +49,32 @@ class Win_home(QMainWindow):
         #     if item:
         #         # 移除 Qt.ItemIsEditable 标志
         #         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+
+    def addOneDevice(self):
+        rowPosition = self.createTaskUi.newConnectForm.rowCount()
+        self.createTaskUi.newConnectForm.insertRow(rowPosition)
+        # 创建按钮
+        addDevice = QPushButton("+")
+        addDevice.clicked.connect(self.addOneDevice)
+        plusDevice = QPushButton("-")
+        plusDevice.clicked.connect(lambda r=rowPosition: self.plusSelfDevice(r))
+        hlayout = QHBoxLayout()
+        hlayout.addWidget(addDevice)
+        hlayout.addWidget(plusDevice)
+        button_widget = QWidget()
+        button_widget.setLayout(hlayout)
+        self.createTaskUi.newConnectForm.setCellWidget(rowPosition, self.createTaskUi.newConnectForm.columnCount() - 1, button_widget)
+
+    def plusSelfDevice(self, row):
+        self.createTaskUi.newConnectForm.removeRow(row)
+        for r in range(self.createTaskUi.newConnectForm.rowCount()):
+            container = self.createTaskUi.newConnectForm.cellWidget(r, self.createTaskUi.newConnectForm.columnCount() - 1)
+            if container:
+                layout = container.layout()
+                plusBtn = layout.itemAt(1).widget()
+                if plusBtn:
+                    plusBtn.clicked.disconnect()
+                    plusBtn.clicked.connect(lambda rc=r: self.plusSelfDevice(rc))
 
     def cancalNewConnect(self):
         self.alphaWidget.hide()

@@ -62,18 +62,48 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="addOne">
+      <widget class="QPushButton" name="addOneDeviceBtn">
        <property name="text">
         <string>+</string>
        </property>
       </widget>
      </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,3,5">
      <item>
-      <widget class="QPushButton" name="plusOne">
+      <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>-</string>
+        <string>任务名</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
