@@ -8,6 +8,8 @@ class Win_home(QMainWindow):
     def __init__(self):
         super().__init__()  # 调用父类的构造函数
         self.ui = ui_load('home.ui')
+        self.ui.addOtaTaskBtn.clicked.connect(self.addOtaTask)
+        # 加载列表
 
         self.setWindowFlags(self.ui.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.NoDropShadowWindowHint)
         self.setAttribute(Qt.WA_StyledBackground, True)
@@ -22,3 +24,35 @@ class Win_home(QMainWindow):
         self.createTaskUi = ui_load('createTask.ui')
         self.createTaskUi.setGeometry((self.ui.width()-self.createTaskUi.width())/2, (self.ui.height()-self.createTaskUi.height())/2, self.createTaskUi.width(), self.createTaskUi.height())
         self.createTaskUi.setParent(self.ui)
+        self.createTaskUi.cancalNewConnectBtn.clicked.connect(self.cancalNewConnect)
+        self.createTaskUi.confirmNewConnectBtn.clicked.connect(self.confirmNewConnect)
+
+        # 隐藏弹窗
+        self.alphaWidget.hide()
+        self.createTaskUi.hide()
+
+    def addOtaTask(self):
+        self.alphaWidget.show()
+        self.createTaskUi.show()
+
+        # rowPosition = self.ui.taskTableWidget.rowCount()
+        # self.ui.taskTableWidget.insertRow(rowPosition)
+        # self.ui.taskTableWidget.setItem(rowPosition, 0, QTableWidgetItem('E10050123B00602'))
+        # self.ui.taskTableWidget.setItem(rowPosition, 1, QTableWidgetItem('E10050123B00602'))
+        # self.ui.taskTableWidget.setItem(rowPosition, 2, QTableWidgetItem('task_1'))
+        # self.ui.taskTableWidget.setItem(rowPosition, 3, QTableWidgetItem('1.0,2.0,3.0'))
+        # self.ui.taskTableWidget.setItem(rowPosition, 4, QTableWidgetItem('2.0'))
+        #
+        # for row in range(self.ui.taskTableWidget.rowCount()):
+        #     item = self.ui.taskTableWidget.item(row, 4)
+        #     if item:
+        #         # 移除 Qt.ItemIsEditable 标志
+        #         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+
+    def cancalNewConnect(self):
+        self.alphaWidget.hide()
+        self.createTaskUi.hide()
+
+    def confirmNewConnect(self):
+        self.alphaWidget.hide()
+        self.createTaskUi.hide()
