@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="addOtaTaskBtn">
     <property name="geometry">
      <rect>
-      <x>800</x>
+      <x>780</x>
       <y>90</y>
       <width>71</width>
       <height>31</height>
@@ -107,6 +107,19 @@
       <string>更新时间</string>
      </property>
     </column>
+   </widget>
+   <widget class="QPushButton" name="refreshOtaTaskBtn">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>90</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>刷新</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

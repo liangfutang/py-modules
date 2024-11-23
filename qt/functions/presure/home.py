@@ -1,6 +1,8 @@
+from threading import Thread
+
 import requests
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox
+from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem
 
 from qt.functions.utils.fileUtil import ui_load
 
@@ -10,6 +12,7 @@ class Win_home(QMainWindow):
         super().__init__()  # 调用父类的构造函数
         self.ui = ui_load('home.ui')
         self.ui.addOtaTaskBtn.clicked.connect(self.addOtaTask)
+        self.ui.refreshOtaTaskBtn.clicked.connect(self.refreshOtaTask)
         # 加载列表
 
         self.setWindowFlags(self.ui.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.NoDropShadowWindowHint)
@@ -28,6 +31,7 @@ class Win_home(QMainWindow):
         self.createTaskUi.cancalNewConnectBtn.clicked.connect(self.cancalNewConnect)
         self.createTaskUi.confirmNewConnectBtn.clicked.connect(self.confirmNewConnect)
         self.createTaskUi.addOneDeviceBtn.clicked.connect(self.addOneDevice)
+        self.refreshTable()
 
         # 隐藏弹窗
         self.alphaWidget.hide()
@@ -50,6 +54,9 @@ class Win_home(QMainWindow):
         #     if item:
         #         # 移除 Qt.ItemIsEditable 标志
         #         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+
+    def refreshOtaTask(self):
+        self.refreshTable()
 
     def addOneDevice(self):
         rowPosition = self.createTaskUi.newConnectForm.rowCount()
@@ -124,6 +131,41 @@ class Win_home(QMainWindow):
         if resJson.status_code != 200:
             QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
             return
+        self.refreshTable()
         # 关闭新建任务窗口
         self.alphaWidget.hide()
         self.createTaskUi.hide()
+
+    def refreshTable(self):
+        def doRefresh():
+            # 请求数据
+            tokenFile = open('./token.txt')
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': tokenFile.read()
+            }
+            tokenFile.close()
+            resJson = requests.session().get("http://localhost:8081/device-service/pressure/ota/page", headers=headers)
+            data = resJson.json()
+            if resJson.status_code != 200 or data['code'] != 200 or len(data['data']) == 0:
+                QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
+                return
+            # 情况表格内容
+            for row in range(self.ui.taskTableWidget.rowCount()):
+                self.ui.taskTableWidget.removeRow(row)
+
+            # 刷新表格数据
+            for item in data['data']:
+                rowPosition = self.ui.taskTableWidget.rowCount()
+                self.ui.taskTableWidget.insertRow(rowPosition)
+                self.ui.taskTableWidget.setItem(rowPosition, 0,  QTableWidgetItem(str(item['deviceId'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 1, QTableWidgetItem(str(item['name'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 2, QTableWidgetItem(str(item['versions'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 3, QTableWidgetItem(str(item['currentVersion'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 4, QTableWidgetItem(str(item['taskId'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 5, QTableWidgetItem(str(item['state'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 6, QTableWidgetItem(str(item['startTime'])))
+                self.ui.taskTableWidget.setItem(rowPosition, 7, QTableWidgetItem(str(item['endTime'])))
+
+        thread = Thread(target=doRefresh)
+        thread.start()
