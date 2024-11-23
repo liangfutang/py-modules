@@ -1,5 +1,6 @@
+import requests
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout
+from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox
 
 from qt.functions.utils.fileUtil import ui_load
 
@@ -81,27 +82,48 @@ class Win_home(QMainWindow):
         self.createTaskUi.hide()
 
     def confirmNewConnect(self):
-        body = []
         # 提交
+        body = {}
         taskName = self.createTaskUi.taskName.text()
+        if taskName is not None:
+            body["name"] = taskName
+        taskList = []
         for row in range(self.createTaskUi.newConnectForm.rowCount()):
-            one = {"name": taskName}
+            one = {}
             # 设备号
             deviceId = self.createTaskUi.newConnectForm.item(row, 0).text()
+            if deviceId is None or deviceId == '':
+                QMessageBox.about(None, "创建失败", "设备号不能为空")
+                return
             one['deviceId'] = deviceId
             # 升级版本
             versions = self.createTaskUi.newConnectForm.item(row, 1).text()
-            if len(versions) > 0:
-                one['otaVersionIdList'] = versions.split(',')
+            if versions is None or versions == '':
+                QMessageBox.about(None, "创建失败", "设备升级版本不能为空")
+                return
+            one['otaVersionIdList'] = versions.split(',')
             # 开始时间
-            startTime = self.createTaskUi.newConnectForm.item(row, 2).text()
-            one['startTime'] = startTime
+            startTime = self.createTaskUi.newConnectForm.item(row, 2)
+            if startTime is not None:
+                one['startTime'] = startTime.text()
             # 结束时间
-            endTime = self.createTaskUi.newConnectForm.item(row, 3).text()
-            one['endTime'] = endTime
+            endTime = self.createTaskUi.newConnectForm.item(row, 3)
+            if endTime is not None:
+                one['endTime'] = endTime.text()
 
-            body.append(one)
+            taskList.append(one)
+        body["taskList"] = taskList
 
+        tokenFile = open('./token.txt')
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': tokenFile.read()
+        }
+        tokenFile.close()
+        resJson = requests.session().post("http://localhost:8081/device-service/pressure/ota/add", json=body, headers=headers)
+        if resJson.status_code != 200:
+            QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
+            return
         # 关闭新建任务窗口
         self.alphaWidget.hide()
         self.createTaskUi.hide()
