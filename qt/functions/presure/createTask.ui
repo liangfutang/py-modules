@@ -90,7 +90,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="taskName"/>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">

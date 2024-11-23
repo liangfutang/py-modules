@@ -81,5 +81,27 @@ class Win_home(QMainWindow):
         self.createTaskUi.hide()
 
     def confirmNewConnect(self):
+        body = []
+        # 提交
+        taskName = self.createTaskUi.taskName.text()
+        for row in range(self.createTaskUi.newConnectForm.rowCount()):
+            one = {"name": taskName}
+            # 设备号
+            deviceId = self.createTaskUi.newConnectForm.item(row, 0).text()
+            one['deviceId'] = deviceId
+            # 升级版本
+            versions = self.createTaskUi.newConnectForm.item(row, 1).text()
+            if len(versions) > 0:
+                one['otaVersionIdList'] = versions.split(',')
+            # 开始时间
+            startTime = self.createTaskUi.newConnectForm.item(row, 2).text()
+            one['startTime'] = startTime
+            # 结束时间
+            endTime = self.createTaskUi.newConnectForm.item(row, 3).text()
+            one['endTime'] = endTime
+
+            body.append(one)
+
+        # 关闭新建任务窗口
         self.alphaWidget.hide()
         self.createTaskUi.hide()
