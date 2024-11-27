@@ -2,7 +2,7 @@ from threading import Thread
 
 import requests
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem
+from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem, QFileDialog
 
 from qt.functions.presure.libs.presureShare import AC, HP
 from qt.functions.utils.fileUtil import ui_load
@@ -16,6 +16,7 @@ class Win_home(QMainWindow):
         self.ui.refreshOtaTaskBtn.clicked.connect(self.refreshOtaTask)
         self.ui.lastPageBtn.clicked.connect(self.lastPage)
         self.ui.nextPageBtn.clicked.connect(self.nextPage)
+        self.ui.exportPressureOtaBtn.clicked.connect(self.exportPressureOta)
         # 加载列表
 
         self.setWindowFlags(self.ui.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.NoDropShadowWindowHint)
@@ -76,6 +77,29 @@ class Win_home(QMainWindow):
             return
         HP.pageNo = HP.pageNo + 1
         self.refreshTable()
+
+    def exportPressureOta(self):
+        taskName = self.ui.pressureNameEdit.text()
+        if taskName is None or taskName == '':
+            QMessageBox.about(None, "参数异常", "缺少必要的压测批次名")
+            return
+        body = {'name': taskName}
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': AC.token
+        }
+        response = requests.session().post('https://si.kalman-navigation.com/device-service/pressure/ota/export', json=body, headers=headers)
+        if response.status_code != 200:
+            QMessageBox.about(None, "下载失败", "请求数据源异常")
+            return
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getSaveFileName(self, "保存文件", "压测结果.xlsx", "Text Files (*.txt);;All Files (*)", options=options)
+        if fileName:
+            with open(fileName, 'wb') as file:
+                file.write(response.content)
+            QMessageBox.about(None, "下载成功", f"文件已保存至: {fileName}")
+        else:
+            QMessageBox.about(None, "下载失败", f"无法下载文件，状态码: {response.status_code}")
 
     def addOneDevice(self):
         rowPosition = self.createTaskUi.newConnectForm.rowCount()
