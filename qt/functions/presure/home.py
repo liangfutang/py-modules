@@ -64,8 +64,10 @@ class Win_home(QMainWindow):
         self.createTaskUi.newConnectForm.insertRow(rowPosition)
         # 创建按钮
         addDevice = QPushButton("+")
+        addDevice.setFixedHeight(20)
         addDevice.clicked.connect(self.addOneDevice)
         plusDevice = QPushButton("-")
+        plusDevice.setFixedHeight(20)
         plusDevice.clicked.connect(lambda r=rowPosition: self.plusSelfDevice(r))
         hlayout = QHBoxLayout()
         hlayout.addWidget(addDevice)
