@@ -4,6 +4,7 @@ import requests
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem
 
+from qt.functions.presure.libs.presureShare import SI
 from qt.functions.utils.fileUtil import ui_load
 
 
@@ -121,13 +122,11 @@ class Win_home(QMainWindow):
             taskList.append(one)
         body["taskList"] = taskList
 
-        tokenFile = open('./token.txt')
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': tokenFile.read()
+            'Authorization': SI.token
         }
-        tokenFile.close()
-        resJson = requests.session().post("http://localhost:8081/device-service/pressure/ota/add", json=body, headers=headers)
+        resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/add", json=body, headers=headers)
         if resJson.status_code != 200:
             QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
             return
@@ -139,21 +138,22 @@ class Win_home(QMainWindow):
     def refreshTable(self):
         def doRefresh():
             # 请求数据
-            tokenFile = open('./token.txt')
             headers = {
                 'Content-Type': 'application/json',
-                'Authorization': tokenFile.read()
+                'Authorization': SI.token
             }
-            tokenFile.close()
-            resJson = requests.session().get("http://localhost:8081/device-service/pressure/ota/page", headers=headers)
+            body = {}
+            resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/page", json=body, headers=headers)
             data = resJson.json()
-            if resJson.status_code != 200 or data['code'] != 200 or len(data['data']) == 0:
-                QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
+            if resJson.status_code != 200 or data['code'] != 200:
+                QMessageBox.about(None, "请求失败", f"更新ota压测列表失败,状态码: {resJson.status_code}")
                 return
-            # 情况表格内容
-            for row in range(self.ui.taskTableWidget.rowCount()):
-                self.ui.taskTableWidget.removeRow(row)
+            # 清空表格内容
+            self.ui.taskTableWidget.clearContents()
+            self.ui.taskTableWidget.setRowCount(0)
 
+            if len(data['data']) == 0:
+                return
             # 刷新表格数据
             for item in data['data']:
                 rowPosition = self.ui.taskTableWidget.rowCount()
