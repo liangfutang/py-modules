@@ -9,4 +9,8 @@ class SI:
 class AC:
     account = None
     password = None
-    token = None
+
+class HP:
+    pageNo = 1
+    pageSize = 10
+    totalPage = None

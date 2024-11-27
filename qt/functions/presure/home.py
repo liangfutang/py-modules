@@ -4,7 +4,7 @@ import requests
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem
 
-from qt.functions.presure.libs.presureShare import SI
+from qt.functions.presure.libs.presureShare import AC, HP
 from qt.functions.utils.fileUtil import ui_load
 
 
@@ -126,7 +126,7 @@ class Win_home(QMainWindow):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': SI.token
+            'Authorization': AC.token
         }
         resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/add", json=body, headers=headers)
         if resJson.status_code != 200:
@@ -143,9 +143,12 @@ class Win_home(QMainWindow):
             # 请求数据
             headers = {
                 'Content-Type': 'application/json',
-                'Authorization': SI.token
+                'Authorization': AC.token
             }
-            body = {}
+            body = {
+                "pageNo": HP.pageNo,
+                "pageSize": HP.pageSize
+            }
             if pressureName is not None:
                 body["name"] = pressureName
             resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/page", json=body, headers=headers)
@@ -153,6 +156,7 @@ class Win_home(QMainWindow):
             if resJson.status_code != 200 or data['code'] != 200:
                 QMessageBox.about(None, "请求失败", f"更新ota压测列表失败,状态码: {resJson.status_code}")
                 return
+            HP.totalPage = data['total']
             # 清空表格内容
             self.ui.taskTableWidget.clearContents()
             self.ui.taskTableWidget.setRowCount(0)
