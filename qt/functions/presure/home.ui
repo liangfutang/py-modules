@@ -174,14 +174,14 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="lastPage">
+       <widget class="QPushButton" name="lastPageBtn">
         <property name="text">
          <string>上一页</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="nextPage">
+       <widget class="QPushButton" name="nextPageBtn">
         <property name="text">
          <string>下一页</string>
         </property>

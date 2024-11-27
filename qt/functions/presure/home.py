@@ -14,6 +14,8 @@ class Win_home(QMainWindow):
         self.ui = ui_load('home.ui')
         self.ui.addOtaTaskBtn.clicked.connect(self.addOtaTask)
         self.ui.refreshOtaTaskBtn.clicked.connect(self.refreshOtaTask)
+        self.ui.lastPageBtn.clicked.connect(self.lastPage)
+        self.ui.nextPageBtn.clicked.connect(self.nextPage)
         # 加载列表
 
         self.setWindowFlags(self.ui.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.NoDropShadowWindowHint)
@@ -57,6 +59,22 @@ class Win_home(QMainWindow):
         #         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
     def refreshOtaTask(self):
+        self.refreshTable()
+
+    def lastPage(self):
+        pageNo = HP.pageNo
+        if pageNo <= 1:
+            QMessageBox.about(None, "翻页提示", "当前已经是首页")
+            return
+        HP.pageNo = HP.pageNo - 1
+        self.refreshTable()
+
+    def nextPage(self):
+        pageNo = HP.pageNo
+        if pageNo + 1 >= HP.pageNo:
+            QMessageBox.about(None, "翻页提示", "当前已经是最后一页")
+            return
+        HP.pageNo = HP.pageNo + 1
         self.refreshTable()
 
     def addOneDevice(self):
