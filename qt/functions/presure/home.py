@@ -137,12 +137,15 @@ class Win_home(QMainWindow):
 
     def refreshTable(self):
         def doRefresh():
+            pressureName = self.ui.pressureNameEdit.text()
             # 请求数据
             headers = {
                 'Content-Type': 'application/json',
                 'Authorization': SI.token
             }
             body = {}
+            if pressureName is not None:
+                body["name"] = pressureName
             resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/page", json=body, headers=headers)
             data = resJson.json()
             if resJson.status_code != 200 or data['code'] != 200:
