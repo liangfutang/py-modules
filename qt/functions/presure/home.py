@@ -221,7 +221,16 @@ class Win_home(QMainWindow):
                 setItem(rowPosition, 2, ','.join(f'{one}' for one in item['packageNameList']))
                 setItem(rowPosition, 3, item['currentPackageName'])
                 setItem(rowPosition, 4, item['taskId'])
-                setItem(rowPosition, 5, item['state'])
+                state = item['state']
+                if state == 0:
+                    state = '等待升级'
+                elif state == 1:
+                    state = '升级中'
+                elif state == 2:
+                    state = '暂停执行'
+                elif state == 3:
+                    state = '升级结束'
+                setItem(rowPosition, 5, state)
                 setItem(rowPosition, 6, item['startTime'])
                 setItem(rowPosition, 7, item['endTime'])
 
