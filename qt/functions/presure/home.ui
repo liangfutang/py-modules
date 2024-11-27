@@ -11,116 +11,184 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>OTA压测系统</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="addOtaTaskBtn">
-    <property name="geometry">
-     <rect>
-      <x>780</x>
-      <y>90</y>
-      <width>71</width>
-      <height>31</height>
-     </rect>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="topMargin">
+     <number>20</number>
     </property>
-    <property name="text">
-     <string>新建</string>
-    </property>
-   </widget>
-   <widget class="QTableWidget" name="taskTableWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>140</y>
-      <width>921</width>
-      <height>481</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QHeaderView::section {
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>批次名</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="pressureNameEdit"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="refreshOtaTaskBtn">
+        <property name="text">
+         <string>搜索</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="addOtaTaskBtn">
+        <property name="text">
+         <string>新建</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="taskTableWidget">
+      <property name="styleSheet">
+       <string notr="true">QHeaderView::section {
 	border-top:0px solid #E5E5E5;
 	border-left:0px solid #E5E5E5;
 	border-right:0.5px solid #E5E5E5;
 	border-bottom: 0.5px solid #E5E5E5;
 }</string>
-    </property>
-    <attribute name="horizontalHeaderMinimumSectionSize">
-     <number>80</number>
-    </attribute>
-    <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>80</number>
-    </attribute>
-    <attribute name="horizontalHeaderStretchLastSection">
-     <bool>true</bool>
-    </attribute>
-    <attribute name="verticalHeaderCascadingSectionResizes">
-     <bool>false</bool>
-    </attribute>
-    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-     <bool>false</bool>
-    </attribute>
-    <attribute name="verticalHeaderStretchLastSection">
-     <bool>false</bool>
-    </attribute>
-    <column>
-     <property name="text">
-      <string>设备号</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>任务名</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>升级版本</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>当前版本</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>关联任务id</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>状态</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>开始时间</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>结束时间</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>更新时间</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="QPushButton" name="refreshOtaTaskBtn">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>90</y>
-      <width>71</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>刷新</string>
-    </property>
-   </widget>
+      </property>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>80</number>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>80</number>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>设备号</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>任务名</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>升级版本</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>当前版本</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>关联任务id</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>状态</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>开始时间</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>结束时间</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>更新时间</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="5,0,1">
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nextPage">
+        <property name="text">
+         <string>下一页</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -128,7 +196,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

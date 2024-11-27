@@ -154,18 +154,25 @@ class Win_home(QMainWindow):
 
             if len(data['data']) == 0:
                 return
+            def setItem(row, col, one):
+                if one is None or one == '':
+                    return
+                oneItem = QTableWidgetItem(str(one))
+                oneItem.setFlags(oneItem.flags() & ~Qt.ItemIsEditable)
+                self.ui.taskTableWidget.setItem(row, col, oneItem)
+
             # 刷新表格数据
             for item in data['data']:
                 rowPosition = self.ui.taskTableWidget.rowCount()
                 self.ui.taskTableWidget.insertRow(rowPosition)
-                self.ui.taskTableWidget.setItem(rowPosition, 0,  QTableWidgetItem(str(item['deviceId'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 1, QTableWidgetItem(str(item['name'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 2, QTableWidgetItem(str(item['versions'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 3, QTableWidgetItem(str(item['currentVersion'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 4, QTableWidgetItem(str(item['taskId'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 5, QTableWidgetItem(str(item['state'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 6, QTableWidgetItem(str(item['startTime'])))
-                self.ui.taskTableWidget.setItem(rowPosition, 7, QTableWidgetItem(str(item['endTime'])))
+                setItem(rowPosition, 0, item['deviceId'])
+                setItem(rowPosition, 1, item['name'])
+                setItem(rowPosition, 2, ','.join(f'{one}' for one in item['packageNameList']))
+                setItem(rowPosition, 3, item['currentPackageName'])
+                setItem(rowPosition, 4, item['taskId'])
+                setItem(rowPosition, 5, item['state'])
+                setItem(rowPosition, 6, item['startTime'])
+                setItem(rowPosition, 7, item['endTime'])
 
         thread = Thread(target=doRefresh)
         thread.start()
