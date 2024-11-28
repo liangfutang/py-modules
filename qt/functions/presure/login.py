@@ -1,13 +1,15 @@
+from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QWidget
 
 from home import Win_home
 from libs.presureShare import SI
-from libs.fileUtil import ui_load
+from libs.fileUtil import ui_load, resource_path
 
 
 class Win_Login(QWidget):
     def __init__(self):
         self.ui = ui_load('login.ui')
+        self.ui.label.setPixmap(QPixmap(resource_path("./images/analytics-small.png")))
         self.ui.cencalBtn.clicked.connect(self.cancalHandle)
         self.ui.confirmBtn.clicked.connect(self.confirmHandle)
         self.ui.passwordEdit.returnPressed.connect(self.confirmHandle)
