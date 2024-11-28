@@ -1,10 +1,8 @@
-import requests
-from PySide2.QtWidgets import QWidget, QMessageBox
+from PySide2.QtWidgets import QWidget
 
-from qt.functions.presure.home import Win_home
-from qt.functions.presure.libs.presureShare import AC, SI
+from home import Win_home
+from libs.presureShare import SI
 from qt.functions.utils.fileUtil import ui_load
-from qt.functions.utils.paramValid import blank
 
 
 class Win_Login(QWidget):

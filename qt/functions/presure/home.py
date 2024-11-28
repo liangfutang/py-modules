@@ -1,10 +1,10 @@
 from threading import Thread
 
 import requests
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, Signal, Slot
 from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem, QFileDialog
 
-from qt.functions.presure.libs.presureShare import AC, HP
+from libs.presureShare import AC, HP
 from qt.functions.utils.fileUtil import ui_load
 
 
@@ -40,6 +40,9 @@ class Win_home(QMainWindow):
         # 隐藏弹窗
         self.alphaWidget.hide()
         self.createTaskUi.hide()
+
+        # 连接到信号槽
+        self.request_failed.connect(self.show_request_failed_message)
 
     def addOtaTask(self):
         self.alphaWidget.show()
@@ -195,12 +198,12 @@ class Win_home(QMainWindow):
                 "pageNo": HP.pageNo,
                 "pageSize": HP.pageSize
             }
-            if pressureName is not None:
+            if pressureName is not None and pressureName.strip() != '':
                 body["name"] = pressureName
             resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/page", json=body, headers=headers)
             data = resJson.json()
             if resJson.status_code != 200 or data['code'] != 200:
-                QMessageBox.about(None, "请求失败", f"更新ota压测列表失败,状态码: {resJson.status_code}")
+                self.request_failed.emit(f"更新ota压测列表失败,状态码: {data['message']}")
                 return
             HP.totalPage = data['total']
             # 清空表格内容
@@ -240,3 +243,11 @@ class Win_home(QMainWindow):
 
         thread = Thread(target=doRefresh)
         thread.start()
+
+    # 定义一个信号
+    request_failed = Signal(str)
+
+    # @Slot(str)
+    def show_request_failed_message(self, message):
+        QMessageBox.about(None, "请求失败", message)
+
