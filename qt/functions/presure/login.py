@@ -2,7 +2,7 @@ from PySide2.QtWidgets import QWidget
 
 from home import Win_home
 from libs.presureShare import SI
-from qt.functions.utils.fileUtil import ui_load
+from libs.fileUtil import ui_load
 
 
 class Win_Login(QWidget):

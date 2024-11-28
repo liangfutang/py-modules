@@ -5,7 +5,7 @@ from PySide2.QtCore import Qt, Signal, Slot
 from PySide2.QtWidgets import QMainWindow, QWidget, QPushButton, QHBoxLayout, QMessageBox, QTableWidgetItem, QFileDialog
 
 from libs.presureShare import AC, HP
-from qt.functions.utils.fileUtil import ui_load
+from libs.fileUtil import ui_load
 
 
 class Win_home(QMainWindow):
