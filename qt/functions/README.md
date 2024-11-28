@@ -9,7 +9,7 @@ pyinstaller demo1.py --onefile --noconsole --add-data="ui;ui" --strip --clean --
 ```
 1.2 pressure打包
 ```shell
-pyinstaller ./presure/main.py --onefile --noconsole --add-data="./presure/libs;libs" --add-data="./presure/images;images" --add-data="./presure/home.ui;." --add-data="./presure/login.ui;." --add-data="./presure/createTask.ui;." --clean
+pyinstaller main.py --onefile --noconsole --add-data="libs;libs" --add-data="images;images" --add-data="home.ui;." --add-data="login.ui;." --add-data="createTask.ui;." --clean --hidden-import PySide2.QtXml
 ```
 
 2. ui转python
