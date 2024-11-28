@@ -135,10 +135,11 @@ class Win_home(QMainWindow):
 
     def confirmNewConnect(self):
         # 提交
-        body = {}
         taskName = self.createTaskUi.taskName.text()
-        if taskName is not None:
-            body["name"] = taskName
+        if taskName is None or taskName.strip() == '':
+            QMessageBox.about(None, "创建失败", "升级批次名不能为空")
+            return
+        body = {"name": taskName.strip()}
         taskList = []
         for row in range(self.createTaskUi.newConnectForm.rowCount()):
             one = {}
@@ -164,6 +165,9 @@ class Win_home(QMainWindow):
                 one['endTime'] = endTime.text()
 
             taskList.append(one)
+        if not taskList:
+            QMessageBox.about(None, "创建失败", "至少要有一个升级设备详情")
+            return
         body["taskList"] = taskList
 
         headers = {
