@@ -9,6 +9,7 @@ class SI:
 class AC:
     account = None
     password = None
+    token = None
 
 class HP:
     pageNo = 1
