@@ -27,6 +27,7 @@ class Win_create_task:
         self.createTaskUi.hide()
 
     def cancalNewConnect(self):
+        self.createTaskUi.newConnectForm.setRowCount(0)
         self.alphaWidget.hide()
         self.createTaskUi.hide()
 
