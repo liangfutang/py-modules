@@ -70,11 +70,19 @@ class Win_create_task:
                 return
             one['deviceId'] = deviceId
             # 升级版本
-            versions = self.createTaskUi.newConnectForm.item(row, 1).text()
-            if versions is None or versions == '':
+            versionsWidget = self.createTaskUi.newConnectForm.cellWidget(row, 1)
+            otaVersionIdList = []
+            if versionsWidget:
+                layout = versionsWidget.layout()
+                for index in range(layout.count()):
+                    widget = layout.itemAt(index).widget()
+                    if isinstance(widget, QCheckBox) and widget.isChecked():
+                        otaVersionIdList.append(widget.property("versionId"))
+
+            if not otaVersionIdList:
                 QMessageBox.about(None, "创建失败", "设备升级版本不能为空")
                 return
-            one['otaVersionIdList'] = versions.split(',')
+            one['otaVersionIdList'] = otaVersionIdList
             # 开始时间
             startTime = self.createTaskUi.newConnectForm.item(row, 2)
             if startTime is not None:
