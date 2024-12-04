@@ -1,9 +1,10 @@
 import requests
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QWidget, QMessageBox, QHBoxLayout, QPushButton
+from PySide2.QtWidgets import QWidget, QMessageBox, QHBoxLayout, QPushButton, QComboBox, QLabel, QVBoxLayout, QCheckBox
 
 from libs.fileUtil import ui_load
 from libs.presureShare import AC
+from api import selectVersionMap
 
 
 class Win_create_task:
@@ -22,9 +23,27 @@ class Win_create_task:
         self.createTaskUi.cancalNewConnectBtn.clicked.connect(self.cancalNewConnect)
         self.createTaskUi.confirmNewConnectBtn.clicked.connect(self.confirmNewConnect)
         self.createTaskUi.addOneDeviceBtn.clicked.connect(self.addOneDevice)
+        # 设置单元格事件
+        self.createTaskUi.newConnectForm.itemChanged.connect(self.cell_event)
         # 隐藏弹窗
         self.alphaWidget.hide()
         self.createTaskUi.hide()
+
+    def cell_event(self, item):
+        if item is None or item.column() != 0:
+            return
+        versionIdMap = selectVersionMap(item.text())
+        if not versionIdMap:
+            return
+        container_widget = QWidget()
+        layout = QVBoxLayout(container_widget)
+        layout.setContentsMargins(0, 0, 0, 0)
+        for (id, version) in versionIdMap.items():
+            checkbox = QCheckBox(version)
+            checkbox.setProperty("versionId", id)
+            layout.addWidget(checkbox)
+        self.createTaskUi.newConnectForm.setCellWidget(item.row(), item.column()+1, container_widget)
+        self.createTaskUi.newConnectForm.resizeRowsToContents()
 
     def cancalNewConnect(self):
         self.createTaskUi.newConnectForm.setRowCount(0)
