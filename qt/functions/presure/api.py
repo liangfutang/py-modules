@@ -1,14 +1,14 @@
 import requests
 from PySide2.QtCore import Signal, QObject
 from PySide2.QtWidgets import QMessageBox, QTableWidgetItem, QWidget, QCheckBox
-
 from libs.presureShare import AC
+
 
 '''
 根据相关参数查询ota升级的版本信息
 '''
 class VersionSelect(QObject):
-    versionSingle = Signal(QTableWidgetItem, dict)
+    versionSignal = Signal(QTableWidgetItem, dict)
 
     def selectVersionMap(self, item):
         deviceId = item.text()
@@ -31,7 +31,7 @@ class VersionSelect(QObject):
             if resJson['code'] != 200:
                 QMessageBox.about(None, "查询结果", f"查询失败：{resJson['message']}")
                 return
-            self.versionSingle.emit(item, {item['id']: item['packageVersion'] for item in resJson['data']})
+            self.versionSignal.emit(item, {item['id']: item['packageVersion'] for item in resJson['data']})
         except Exception as e:
             QMessageBox.critical(None, "查询结果", f"发生异常：{str(e)}")
 
@@ -39,7 +39,7 @@ class VersionSelect(QObject):
 提交新升级任务
 '''
 class ConfirmNewTask(QObject):
-    confirmSingle = Signal()
+    confirmSignal = Signal()
     def confirm(self, ui):
         taskName = ui.taskName.text()
         if taskName is None or taskName.strip() == '':
@@ -93,4 +93,4 @@ class ConfirmNewTask(QObject):
         if resJson.status_code != 200:
             QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
             return
-        self.confirmSingle.emit()
+        self.confirmSignal.emit()

@@ -29,9 +29,9 @@ class Win_create_task:
         self.createTaskUi.newConnectForm.itemChanged.connect(self.cell_event)
         # 异步处理获取版本信息链接到信号槽
         self.versionSelect = VersionSelect()
-        self.versionSelect.versionSingle.connect(self.operate_version)
+        self.versionSelect.versionSignal.connect(self.operate_version)
         self.confirmNewTask = ConfirmNewTask()
-        self.confirmNewTask.confirmSingle.connect(win_home.refreshTable)
+        self.confirmNewTask.confirmSignal.connect(win_home.refreshTable)
         # 隐藏弹窗
         self.alphaWidget.hide()
         self.createTaskUi.hide()
