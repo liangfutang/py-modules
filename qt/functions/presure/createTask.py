@@ -1,10 +1,12 @@
+from threading import Thread
+
 import requests
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QWidget, QMessageBox, QHBoxLayout, QPushButton, QComboBox, QLabel, QVBoxLayout, QCheckBox
 
 from libs.fileUtil import ui_load
 from libs.presureShare import AC
-from api import selectVersionMap
+from api import VersionSelect
 
 
 class Win_create_task:
@@ -25,6 +27,9 @@ class Win_create_task:
         self.createTaskUi.addOneDeviceBtn.clicked.connect(self.addOneDevice)
         # 设置单元格事件
         self.createTaskUi.newConnectForm.itemChanged.connect(self.cell_event)
+        # 异步处理获取版本信息链接到信号槽
+        self.versionSelect = VersionSelect()
+        self.versionSelect.versionSingle.connect(self.operate_version)
         # 隐藏弹窗
         self.alphaWidget.hide()
         self.createTaskUi.hide()
@@ -32,7 +37,10 @@ class Win_create_task:
     def cell_event(self, item):
         if item is None or item.column() != 0:
             return
-        versionIdMap = selectVersionMap(item.text())
+        thread = Thread(target=self.versionSelect.selectVersionMap, args=(item,))
+        thread.start()
+
+    def operate_version(self, item, versionIdMap):
         if not versionIdMap:
             return
         container_widget = QWidget()
@@ -42,7 +50,7 @@ class Win_create_task:
             checkbox = QCheckBox(version)
             checkbox.setProperty("versionId", id)
             layout.addWidget(checkbox)
-        self.createTaskUi.newConnectForm.setCellWidget(item.row(), item.column()+1, container_widget)
+        self.createTaskUi.newConnectForm.setCellWidget(item.row(), item.column() + 1, container_widget)
         self.createTaskUi.newConnectForm.resizeRowsToContents()
 
     def cancalNewConnect(self):
