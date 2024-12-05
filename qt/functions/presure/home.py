@@ -31,7 +31,7 @@ class Win_home(QMainWindow):
         self.request_failed.connect(self.show_request_failed_message)
 
     def addOtaTask(self):
-        self.createTask = Win_create_task(self.ui) if self.createTask is None else self.createTask
+        self.createTask = Win_create_task(self) if self.createTask is None else self.createTask
         self.createTask.showNewConnect()
 
     def refreshOtaTask(self):

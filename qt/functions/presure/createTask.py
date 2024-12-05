@@ -1,17 +1,17 @@
 from threading import Thread
 
-import requests
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QWidget, QMessageBox, QHBoxLayout, QPushButton, QComboBox, QLabel, QVBoxLayout, QCheckBox
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QCheckBox
 
+from api import VersionSelect, ConfirmNewTask
 from libs.fileUtil import ui_load
-from libs.presureShare import AC
-from api import VersionSelect
 
 
 class Win_create_task:
-    def __init__(self, parent_ui):
-        super().__init__()  # 调用父类的构造函数
+    def __init__(self, win_home):
+        super().__init__()
+        self.win_home = win_home
+        parent_ui = win_home.ui
         # 半透明背景
         self.alphaWidget = QWidget(
             parent_ui, objectName='aaa',
@@ -30,6 +30,8 @@ class Win_create_task:
         # 异步处理获取版本信息链接到信号槽
         self.versionSelect = VersionSelect()
         self.versionSelect.versionSingle.connect(self.operate_version)
+        self.confirmNewTask = ConfirmNewTask()
+        self.confirmNewTask.confirmSingle.connect(win_home.refreshTable)
         # 隐藏弹窗
         self.alphaWidget.hide()
         self.createTaskUi.hide()
@@ -55,6 +57,7 @@ class Win_create_task:
 
     def cancalNewConnect(self):
         self.createTaskUi.newConnectForm.setRowCount(0)
+        self.createTaskUi.taskName.setText('')
         self.alphaWidget.hide()
         self.createTaskUi.hide()
 
@@ -63,58 +66,8 @@ class Win_create_task:
         self.createTaskUi.show()
     def confirmNewConnect(self):
         # 提交
-        taskName = self.createTaskUi.taskName.text()
-        if taskName is None or taskName.strip() == '':
-            QMessageBox.about(None, "创建失败", "升级批次名不能为空")
-            return
-        body = {"name": taskName.strip()}
-        taskList = []
-        for row in range(self.createTaskUi.newConnectForm.rowCount()):
-            one = {}
-            # 设备号
-            deviceId = self.createTaskUi.newConnectForm.item(row, 0).text()
-            if deviceId is None or deviceId == '':
-                QMessageBox.about(None, "创建失败", "设备号不能为空")
-                return
-            one['deviceId'] = deviceId
-            # 升级版本
-            versionsWidget = self.createTaskUi.newConnectForm.cellWidget(row, 1)
-            otaVersionIdList = []
-            if versionsWidget:
-                layout = versionsWidget.layout()
-                for index in range(layout.count()):
-                    widget = layout.itemAt(index).widget()
-                    if isinstance(widget, QCheckBox) and widget.isChecked():
-                        otaVersionIdList.append(widget.property("versionId"))
-
-            if not otaVersionIdList:
-                QMessageBox.about(None, "创建失败", "设备升级版本不能为空")
-                return
-            one['otaVersionIdList'] = otaVersionIdList
-            # 开始时间
-            startTime = self.createTaskUi.newConnectForm.item(row, 2)
-            if startTime is not None:
-                one['startTime'] = startTime.text()
-            # 结束时间
-            endTime = self.createTaskUi.newConnectForm.item(row, 3)
-            if endTime is not None:
-                one['endTime'] = endTime.text()
-
-            taskList.append(one)
-        if not taskList:
-            QMessageBox.about(None, "创建失败", "至少要有一个升级设备详情")
-            return
-        body["taskList"] = taskList
-
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': AC.token
-        }
-        resJson = requests.session().post("https://si.kalman-navigation.com/device-service/pressure/ota/add", json=body, headers=headers)
-        if resJson.status_code != 200:
-            QMessageBox.about(None, "请求失败", f"创建升级任务失败,状态码: {resJson.status_code}")
-            return
-        super().refreshTable()
+        thread = Thread(target=self.confirmNewTask.confirm, args=(self.createTaskUi,))
+        thread.start()
         # 关闭新建任务窗口
         self.alphaWidget.hide()
         self.createTaskUi.hide()
