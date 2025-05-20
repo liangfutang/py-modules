@@ -23,7 +23,7 @@ class MWindow(QtWidgets.QMainWindow):
         # 定时到了，回调 self.show_camera
         self.timer_camera.timeout.connect(self.show_camera)
 
-        # 加载 YOLO nano 模型，第一次比较耗时，要20秒左右
+        # 加载 YOLO nano 模型，第一次比较耗时，要20秒左右，会先下载到本地
         self.model = YOLO('yolov8n.pt')
 
         # 要处理的视频帧图片队列，目前就放1帧图片
