@@ -103,10 +103,11 @@ def faceMatch():
     recognizer = cv.face.LBPHFaceRecognizer_create()
     recognizer.read('./data/trainer/trainer.yml')
     # 获取用户姓名
-    names = []
-    imagesPath = [os.path.join('./data/pic', f) for f in os.listdir('./data/pic')]
-    for imagesPath in imagesPath:
-        names.append(str(os.path.split(imagesPath)[1].split('.')[1]))
+    # names = []
+    # imagesPath = [os.path.join('./data/pic', f) for f in os.listdir('./data/pic')]
+    # for imagesPath in imagesPath:
+    #     names.append(str(os.path.split(imagesPath)[1].split('.')[1]))
+    names = [f.split('.')[1] for f in os.listdir('./data/pic')]
 
     def detect(img):
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -122,7 +123,7 @@ def faceMatch():
             if confidence > 80:
                 cv.putText(img, 'unkown', (x+10, y-10), cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 1)
             else:
-                cv.putText(img, str(names[ids-1]), (x + 10, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 1)
+                cv.putText(img, f'{str(names[ids-1])} {confidence:.2f}', (x + 10, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 1)
         cv.imshow('face', img)
 
     detect(cv.imread('face01.jpg'))
